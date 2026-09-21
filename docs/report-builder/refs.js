@@ -1,0 +1,30 @@
+const dataset = require('./dataset.json');
+module.exports = [
+['h1x', 'REFERENCES'],
+['ref', 'Aljofey, A., Jiang, Q., Rasool, A., Chen, H., Liu, W., Qu, Q., & Wang, Y. (2022). An effective detection approach for phishing websites using URL and HTML features. _Scientific Reports, 12_, 8842.'],
+['ref', 'Anti-Phishing Working Group. (2024). _Phishing activity trends report_. APWG. https://apwg.org/trendsreports/'],
+['ref', 'Bahnsen, A. C., Bohorquez, E. C., Villegas, S., Vargas, J., & González, F. A. (2017). Classifying phishing URLs using recurrent neural networks. In _2017 APWG Symposium on Electronic Crime Research (eCrime)_ (pp. 1–8). IEEE.'],
+['ref', 'Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. _MIS Quarterly, 13_(3), 319–340.'],
+['ref', 'DeLone, W. H., & McLean, E. R. (2003). The DeLone and McLean model of information systems success: A ten-year update. _Journal of Management Information Systems, 19_(4), 9–30.'],
+['ref', 'Garera, S., Provos, N., Chew, M., & Rubin, A. D. (2007). A framework for detection and measurement of phishing attacks. In _Proceedings of the 2007 ACM Workshop on Recurring Malcode_ (pp. 1–8). ACM.'],
+['ref', 'Jain, A. K., & Gupta, B. B. (2016). A novel approach to protect against phishing attacks at client side using auto-updated white-list. _EURASIP Journal on Information Security, 2016_, 9.'],
+['ref', 'Levenshtein, V. I. (1966). Binary codes capable of correcting deletions, insertions, and reversals. _Soviet Physics Doklady, 10_(8), 707–710.'],
+['ref', 'Mohammad, R. M., Thabtah, F., & McCluskey, L. (2014). Intelligent rule-based phishing websites classification. _IET Information Security, 8_(3), 153–160.'],
+['ref', 'OWASP Foundation. (2021). _OWASP Top 10: 2021_. https://owasp.org/Top10/'],
+['ref', 'Rogers, R. W. (1975). A protection motivation theory of fear appeals and attitude change. _The Journal of Psychology, 91_(1), 93–114.'],
+['ref', 'Sahingoz, O. K., Buber, E., Demir, O., & Diri, B. (2019). Machine learning based phishing detection from URLs. _Expert Systems with Applications, 117_, 345–357.'],
+['ref', 'Verma and Das (2023). **[Complete this reference with the full author names, title, journal, volume and pages from the source used in the original draft.]**'],
+['ref', 'Zhang, Y., Hong, J. I., & Cranor, L. F. (2007). CANTINA: A content-based approach to detecting phishing web sites. In _Proceedings of the 16th International Conference on World Wide Web_ (pp. 639–648). ACM.'],
+
+['h1x', 'APPENDIX A: EVALUATION DATASET'],
+['p', 'The labelled demonstration dataset (`data/sample_dataset.csv`) used in Section 5.7. The phishing URLs were constructed to reproduce common phishing techniques and do not refer to live websites.'],
+['table', { widths: [700, 6760, 1900], small: true,
+  head: ['No.', 'URL', 'Label'],
+  rows: dataset.map(([u, l], i) => [String(i + 1), u, l]) }],
+
+['h1x', 'APPENDIX B: RUNNING THE AUTOMATED TESTS'],
+['p', 'The automated test suite is executed from the project folder with the XAMPP PHP interpreter:'],
+['code', 'C:\\xampp\\php\\php.exe tests\\run_tests.php'],
+['p', 'The script prints one line per test (identifier, PASS/FAIL, description and observed value), writes the results to `tests/last_results.json` and ends with a summary such as "27 of 27 tests passed". Demonstration data for presentations can be loaded and removed with:'],
+['code', 'C:\\xampp\\php\\php.exe database\\demo_seed.php\nC:\\xampp\\php\\php.exe database\\demo_seed.php --remove'],
+];

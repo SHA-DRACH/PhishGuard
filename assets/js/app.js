@@ -10,7 +10,7 @@ const VERDICT = {
   suspicious: { title: 'Proceed with caution', color: 'var(--warn)',   msg: 'Some warning signs were detected. Verify the address carefully and avoid entering passwords, PINs or mobile-money codes.' },
   phishing:   { title: 'Likely phishing',      color: 'var(--danger)', msg: 'Strong phishing indicators detected. Do NOT enter any personal information on this website.' },
 };
-const GROUPS = { reputation: 'Reputation', lexical: 'URL analysis', host: 'Host & certificate', content: 'Page content' };
+const GROUPS = { reputation: 'Reputation', lexical: 'URL analysis', host: 'Domain & host', content: 'Page content' };
 const RISKY_WORDS = /(login|log-in|signin|sign-in|verify|verification|secure|account|update|confirm|banking|password|wallet|suspend|unlock|billing|invoice|recover|validate|bonus|reward|airtime|momo|kyc)/gi;
 
 /* ------------------------------------------------------------ chrome */
@@ -94,7 +94,9 @@ if (form) {
         const v = VERDICT[data.verdict];
         $('.pulse-fill', pulse).style.width = Math.max(4, data.score) + '%';
         $('.pulse-fill', pulse).style.background = v.color;
-        $('.pulse-label', pulse).innerHTML = `Live URL check: <b style="color:${v.color}">${data.score}/100 · ${esc(v.title)}</b>`;
+        $('.pulse-label', pulse).innerHTML = data.verdict === 'safe'
+          ? `Address check: <b style="color:${v.color}">no red flags in the URL</b> · press Scan to verify the domain`
+          : `Address check: <b style="color:${v.color}">${data.score}/100 · ${esc(v.title)}</b>`;
         pulse.classList.add('show');
       } catch { /* aborted or offline */ }
     }, 350);
@@ -181,6 +183,9 @@ function xray(urlStr, domain) {
 function decodeURIComponentSafe(s) { try { return decodeURIComponent(s); } catch { return s; } }
 
 function adviceFor(r) {
+  if (r.domain_info?.exists === false && !r.list_match) {
+    return ['Do not click, share or forward this link – the website does not exist.', 'Check the spelling of the address; attackers often send links with small typos.', 'Treat any message containing this link (SMS, WhatsApp, email) as suspicious.', 'Report it so LTC ICT can track the campaign.'];
+  }
   const tips = {
     safe: ['Bookmark sites you use often and open them from your bookmarks.', 'Keep your browser and phone updated.'],
     suspicious: ['Type the official address yourself instead of clicking links.', 'Contact the organisation through a known phone number to confirm.', 'Do not enter passwords, PINs or mobile-money codes.'],
@@ -189,10 +194,39 @@ function adviceFor(r) {
   return tips[r.verdict];
 }
 
-function renderResult(r, scanId) {
+function domainCard(r) {
+  const d = r.domain_info;
+  if (!d || !d.checked) return '';
+  const row = (label, ok, text) => `<div class="dc-item" data-ok="${ok}"><span class="dc-dot"></span><div><small>${label}</small><strong>${text}</strong></div></div>`;
+  const age = d.age_days == null ? null : d.age_days >= 730 ? `${Math.floor(d.age_days / 365)} years` : d.age_days >= 60 ? `${Math.floor(d.age_days / 30)} months` : `${d.age_days} days`;
+  const items = [
+    row('Exists on the Internet', d.exists === true ? 'yes' : d.exists === false ? 'no' : 'unknown',
+      d.exists === true ? 'Yes – browsers can find it' : d.exists === false ? 'No – no browser can open it' : 'Could not verify'),
+    row('Registration', d.registered === true ? (d.age_days != null && d.age_days < 30 ? 'warn' : 'yes') : d.registered === false ? 'no' : 'unknown',
+      d.registered === false ? 'Not registered' : d.created ? `${esc(d.created)} · ${age} old` : d.registered ? 'Registered' : 'Not published'),
+    row('Website responds', d.reachable === true ? 'yes' : d.reachable === false ? 'no' : 'unknown',
+      d.reachable === true ? `Yes (HTTP ${d.http_status ?? ''})` : d.reachable === false ? 'No response' : (d.exists === false ? 'Not applicable' : 'Not checked')),
+    row('Google Safe Browsing', d.safebrowsing === 'listed' ? 'no' : d.safebrowsing === 'clean' ? 'yes' : 'unknown',
+      d.safebrowsing === 'listed' ? 'Listed as dangerous' : d.safebrowsing === 'clean' ? 'Not listed' : 'Not configured'),
+  ];
+  const ips = (d.ips || []).slice(0, 2).map(esc).join(', ');
+  return `<div class="card domain-card" style="margin-top:20px">
+    <div class="card-head"><h3>Domain check</h3><span class="small muted mono">${esc(r.domain)}${ips ? ' → ' + ips : ''}</span></div>
+    <div class="dc-grid">${items.join('')}</div></div>`;
+}
+
+function renderResult(r, scanId, scroll = true) {
   const box = $('#result');
   if (!box) return;
-  const v = VERDICT[r.verdict];
+  const v = { ...VERDICT[r.verdict] };
+  const di = r.domain_info || {};
+  if (di.exists === false && !r.list_match) {
+    v.title = 'Domain not found';
+    v.msg = 'This website does not exist on the Internet, so it cannot be opened in Chrome or any other browser. The link may be mistyped, fake or already taken down – do not trust it or any message that contains it.';
+  } else if (di.reachable === false && !r.list_match) {
+    v.title = 'Website unreachable';
+    v.msg = 'The domain exists but no website answers. It may be offline, newly set up or deliberately hidden – it cannot be verified as safe.';
+  }
   const flagged = r.features.filter((f) => f.risk > 0).length;
 
   const groups = {};
@@ -218,13 +252,14 @@ function renderResult(r, scanId) {
         <div class="meta">
           <span>host: ${esc(r.host)}</span>
           <span>${flagged} of ${r.features.length} signals flagged</span>
-          <span>${r.network ? 'deep scan' : 'URL-only scan'} · ${r.duration_ms} ms</span>
+          <span>${r.network ? (r.deep ? 'deep scan' : 'standard scan') : 'URL-only scan'} · ${r.duration_ms} ms</span>
           ${r.list_match ? `<span>list: ${esc(r.list_match)}</span>` : ''}
         </div>
         <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">${reportLink}${detailLink}</div>
       </div>
     </div>
 
+    ${domainCard(r)}
     <div class="grid grid-2" style="margin-top:20px">
       <div class="card"><h3>URL X-ray</h3>${xray(r.url, r.domain)}
         ${r.final_url && r.final_url !== r.url ? `<p class="small muted" style="margin-top:12px">Final destination after redirects: <code>${esc(r.final_url)}</code></p>` : ''}
@@ -240,14 +275,14 @@ function renderResult(r, scanId) {
   box.classList.add('show');
   animateGauge(box);
   $('#hide-ok', box).addEventListener('change', (e) => $('#signal-board').classList.toggle('filter-safe', e.target.checked));
-  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Saved result page
 const saved = $('#scan-data');
 if (saved) {
   const data = JSON.parse(saved.textContent);
-  renderResult(data, null);
+  renderResult(data, null, false);
   if (data.verdict === 'phishing' && data.alert) raiseAlert(data.url);
 }
 

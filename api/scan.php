@@ -25,7 +25,8 @@ try {
     }
 
     $deep = !empty($_POST['deep']);
-    $result = (new PhishingDetector(db(), $deep))->analyze($url);
+    // Domain existence/registration/reachability checks always run; "deep" adds SSL + page content analysis
+    $result = (new PhishingDetector(db(), true, $deep))->analyze($url);
     $id = save_scan($result, current_user()['id'] ?? null, 'web');
     json_response(['ok' => true, 'scan_id' => $id, 'result' => $result]);
 } catch (InvalidArgumentException $e) {

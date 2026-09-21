@@ -1,5 +1,5 @@
 {
-    "avg_ms": 0.5869698524475098,
+    "avg_ms": 5.081930160522461,
     "results": [
         {
             "id": "UT01",
@@ -156,6 +156,48 @@
             "detail": ""
         },
         {
+            "id": "NT01",
+            "area": "Network",
+            "description": "Made-up domain is detected as non-existent",
+            "pass": true,
+            "detail": "pg-test-ea835a6a-nosuchsite.com"
+        },
+        {
+            "id": "NT02",
+            "area": "Network",
+            "description": "Non-existent domain is never classified safe",
+            "pass": true,
+            "detail": "phishing \/ 67"
+        },
+        {
+            "id": "NT03",
+            "area": "Network",
+            "description": "Unregistered domain is identified via RDAP",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "NT04",
+            "area": "Network",
+            "description": "Real domain exists, is old and reachable",
+            "pass": true,
+            "detail": "1995-08-14 \/ HTTP 200"
+        },
+        {
+            "id": "NT05",
+            "area": "Network",
+            "description": "Real, established domain stays safe",
+            "pass": true,
+            "detail": "safe \/ 0"
+        },
+        {
+            "id": "NT06",
+            "area": "Network",
+            "description": "Sub-domain with no server is not safe",
+            "pass": true,
+            "detail": "suspicious \/ 30"
+        },
+        {
             "id": "IT01",
             "area": "Integration",
             "description": "Scan result is stored in the database",
@@ -188,7 +230,7 @@
             "area": "Performance",
             "description": "URL-only analysis completes in under 100 ms",
             "pass": true,
-            "detail": "avg 0.6 ms"
+            "detail": "avg 5.1 ms"
         }
     ]
 }

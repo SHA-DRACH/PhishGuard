@@ -87,6 +87,7 @@ function save_scan(array $result, ?int $userId, string $source = 'web'): int
         $result['score'],
         $result['verdict'],
         json_encode(['features' => $result['features'], 'list_match' => $result['list_match'],
+                     'domain_info' => $result['domain_info'] ?? null, 'deep' => $result['deep'] ?? false,
                      'final_url' => $result['final_url'], 'duration_ms' => $result['duration_ms']]),
         $source,
         $_SERVER['REMOTE_ADDR'] ?? null,

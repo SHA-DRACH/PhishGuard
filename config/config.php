@@ -25,6 +25,10 @@ define('FETCH_MAX_BYTES', 1048576);
 define('THRESHOLD_SUSPICIOUS', 25); // score >= this => suspicious
 define('THRESHOLD_PHISHING', 50);   // score >= this => phishing
 
+// Google Safe Browsing (the list Chrome uses). Free key: https://console.cloud.google.com/apis/library/safebrowsing.googleapis.com
+// Leave empty to disable.
+define('SAFE_BROWSING_API_KEY', '');
+
 // Simple abuse protection: max full scans per session per minute
 define('SCAN_RATE_LIMIT', 20);
 

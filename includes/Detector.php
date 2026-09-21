@@ -45,13 +45,20 @@ class PhishingDetector
 
     private PDO $db;
     private bool $networkChecks;
+    private bool $deep;
     private array $features = [];
     private int $score = 0;
+    private array $domainInfo = [];
 
-    public function __construct(PDO $db, bool $networkChecks = true)
+    /**
+     * @param bool      $networkChecks Domain intelligence: DNS existence, registration/age, reachability, Safe Browsing
+     * @param bool|null $deep          Also inspect the SSL certificate and download the page content (defaults to $networkChecks)
+     */
+    public function __construct(PDO $db, bool $networkChecks = true, ?bool $deep = null)
     {
         $this->db = $db;
         $this->networkChecks = $networkChecks;
+        $this->deep = $networkChecks && ($deep ?? true);
     }
 
     /* ------------------------------------------------------------------ */
@@ -179,20 +186,36 @@ class PhishingDetector
             $this->add('lexical', 'encoding', 'URL obfuscation', "$encoded percent-encoded characters", 5, 'warn');
         }
 
-        // ---------- Host & Content (network) ----------
+        // ---------- Domain intelligence, host & content (network) ----------
+        $this->domainInfo = ['checked' => false];
         if ($this->networkChecks && $listMatch === null) {
-            $this->hostChecks($host, $isIp, $scheme);
-            if (FETCH_CONTENT) {
-                $finalUrl = $this->contentChecks($url, $host, $regDomain, $trusted) ?? $url;
+            if ($this->safeBrowsingListed($url)) {
+                $listMatch = 'safebrowsing';
+            } else {
+                $exists = $this->domainChecks($host, $regDomain, $isIp);
+                if ($exists) {
+                    if ($this->deep) {
+                        if ($scheme === 'https') $this->sslCheck($host);
+                        if (FETCH_CONTENT) {
+                            $finalUrl = $this->contentChecks($url, $host, $regDomain, $trusted) ?? $url;
+                        }
+                    } else {
+                        $this->reachabilityCheck($url, $host);
+                    }
+                }
             }
         }
 
         // ---------- Verdict ----------
         $score = match ($listMatch) {
-            'blacklist' => 100,
+            'blacklist', 'safebrowsing' => 100,
             'whitelist' => 0,
             default     => min(100, $this->score),
         };
+        // A website that cannot be found or opened can never be reported as safe
+        if ($listMatch === null && (($this->domainInfo['exists'] ?? null) === false || ($this->domainInfo['reachable'] ?? null) === false)) {
+            $score = max($score, THRESHOLD_SUSPICIOUS);
+        }
         $verdict = $score >= THRESHOLD_PHISHING ? 'phishing' : ($score >= THRESHOLD_SUSPICIOUS ? 'suspicious' : 'safe');
 
         return [
@@ -204,7 +227,9 @@ class PhishingDetector
             'list_match'  => $listMatch,
             'final_url'   => $finalUrl,
             'features'    => $this->features,
+            'domain_info' => $this->domainInfo,
             'network'     => $this->networkChecks,
+            'deep'        => $this->deep,
             'duration_ms' => (int)round((microtime(true) - $start) * 1000),
         ];
     }
@@ -274,19 +299,223 @@ class PhishingDetector
         return [$impersonated, $typo];
     }
 
-    private function hostChecks(string $host, bool $isIp, string $scheme): void
+    /* ------------------------ domain intelligence ------------------------ */
+
+    /**
+     * Does the domain really exist on the Internet (can a browser open it)? Is it registered, and how old is it?
+     * Uses DNS-over-HTTPS so ISP resolvers that answer for non-existent names cannot fool the check.
+     * Returns false when the site cannot exist, so later network checks are skipped.
+     */
+    private function domainChecks(string $host, string $regDomain, bool $isIp): bool
     {
-        if (!$isIp) {
-            $ip = gethostbyname($host);
-            if ($ip === $host) {
-                $this->add('host', 'dns', 'DNS resolution', 'Domain does not resolve (may be new, taken down or fake)', 15, 'danger');
-                return;
-            }
-            $this->add('host', 'dns', 'DNS resolution', "Resolves to $ip", 0, 'safe');
+        $this->domainInfo = ['checked' => true, 'exists' => null, 'registered' => null, 'created' => null,
+                             'age_days' => null, 'ips' => [], 'reachable' => null, 'safebrowsing' => SAFE_BROWSING_API_KEY !== '' ? 'clean' : 'off'];
+        if ($isIp) {
+            $this->domainInfo['exists'] = true;
+            $this->domainInfo['ips'] = [$host];
+            return true;
         }
 
-        if ($scheme !== 'https') return;
+        // 1. DNS existence
+        $dns = $this->resolve($host);
+        if ($dns['status'] === 'nxdomain') {
+            $this->domainInfo['exists'] = false;
+            $regMissing = $host === $regDomain || $this->resolve($regDomain)['status'] === 'nxdomain';
+            $this->add('host', 'dns', 'Domain exists',
+                $regMissing ? "\"$regDomain\" does not exist on the Internet – no browser can open it"
+                            : "The sub-domain \"$host\" does not exist, although $regDomain does", 40, 'danger');
+        } elseif ($dns['status'] === 'noaddress') {
+            $this->domainInfo['exists'] = false;
+            $this->add('host', 'dns', 'Domain exists', ($host === $regDomain ? 'The domain' : "The sub-domain \"$host\"") . ' points to no server – no browser can open it', 30, 'danger');
+        } elseif ($dns['status'] === 'ok') {
+            $this->domainInfo['exists'] = true;
+            $this->domainInfo['ips'] = $dns['ips'];
+            $this->add('host', 'dns', 'Domain exists', 'Found on the Internet – resolves to ' . implode(', ', array_slice($dns['ips'], 0, 2)), 0, 'safe');
+            $private = array_filter($dns['ips'], fn($ip) => !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE));
+            if ($private) {
+                $this->add('host', 'dns_private', 'Public address', 'Domain points to a private/internal IP address', 15, 'danger');
+            }
+        } else {
+            $this->add('host', 'dns', 'Domain exists', 'DNS lookup failed – existence could not be verified', 10, 'warn');
+        }
 
+        // 2. Registration & age (RDAP – the modern WHOIS)
+        $rdap = $this->rdap($regDomain);
+        if ($rdap['status'] === 'unregistered') {
+            $this->domainInfo['registered'] = false;
+            // Existence already scored above; registration adds a little weight only when DNS could not decide
+            $this->add('host', 'registration', 'Domain registration', "\"$regDomain\" is not registered with any registrar", $this->domainInfo['exists'] === false ? 5 : 30, 'danger');
+        } elseif ($rdap['status'] === 'ok' && $rdap['created']) {
+            $this->domainInfo['registered'] = true;
+            $days = (int)floor((time() - strtotime($rdap['created'])) / 86400);
+            $this->domainInfo['created'] = substr($rdap['created'], 0, 10);
+            $this->domainInfo['age_days'] = $days;
+            $when = date('M j, Y', strtotime($rdap['created']));
+            $ageText = $days >= 730 ? floor($days / 365) . ' years' : ($days >= 60 ? floor($days / 30) . ' months' : "$days days");
+            [$risk, $status, $note] = match (true) {
+                $days < 30  => [25, 'danger', ' – brand-new domains are a strong phishing sign'],
+                $days < 180 => [12, 'warn', ' – recently created'],
+                $days < 365 => [5, 'warn', ''],
+                default     => [0, 'safe', ''],
+            };
+            $this->add('host', 'domain_age', 'Domain age', "Registered $when ($ageText ago)$note", $risk, $status);
+        } elseif ($rdap['status'] === 'ok') {
+            $this->domainInfo['registered'] = true;
+            $this->add('host', 'domain_age', 'Domain age', 'Registered (creation date not published)', 0, 'info');
+        } else {
+            $tld = substr(strrchr($regDomain, '.') ?: '', 1);
+            $this->add('host', 'domain_age', 'Domain age', $rdap['status'] === 'unsupported'
+                ? "Registration data is not published for .$tld domains" : 'Registration lookup unavailable', 0, 'info');
+        }
+
+        return $this->domainInfo['exists'] !== false;
+    }
+
+    /** DNS-over-HTTPS lookup (Google, then Cloudflare), falling back to the system resolver. */
+    private function resolve(string $name): array
+    {
+        static $cache = [];
+        if (isset($cache[$name])) return $cache[$name];
+
+        foreach (['https://dns.google/resolve?type=A&name=', 'https://cloudflare-dns.com/dns-query?type=A&name='] as $endpoint) {
+            $json = self::httpGetJson($endpoint . rawurlencode($name), ['Accept: application/dns-json'], 5);
+            if (!is_array($json) || !isset($json['Status'])) continue;
+            if ((int)$json['Status'] === 3) return $cache[$name] = ['status' => 'nxdomain', 'ips' => []];
+            if ((int)$json['Status'] !== 0) continue;
+            $ips = array_values(array_map(fn($a) => $a['data'], array_filter($json['Answer'] ?? [], fn($a) => (int)$a['type'] === 1)));
+            if (!$ips) {   // no IPv4 – try IPv6 before declaring "no address"
+                $v6 = self::httpGetJson(str_replace('type=A', 'type=AAAA', $endpoint) . rawurlencode($name), ['Accept: application/dns-json'], 5);
+                $ips = array_values(array_map(fn($a) => $a['data'], array_filter($v6['Answer'] ?? [], fn($a) => (int)$a['type'] === 28)));
+            }
+            return $cache[$name] = $ips ? ['status' => 'ok', 'ips' => $ips] : ['status' => 'noaddress', 'ips' => []];
+        }
+
+        $ips = @gethostbynamel($name) ?: [];
+        return $cache[$name] = $ips ? ['status' => 'ok', 'ips' => $ips] : ['status' => 'error', 'ips' => []];
+    }
+
+    /** RDAP registration lookup via the IANA bootstrap registry. Cached in domain_cache for 12 hours. */
+    private function rdap(string $domain): array
+    {
+        $stmt = $this->db->prepare('SELECT data FROM domain_cache WHERE domain = ? AND fetched_at > NOW() - INTERVAL 12 HOUR');
+        $stmt->execute([$domain]);
+        if ($row = $stmt->fetchColumn()) return json_decode($row, true);
+
+        $tld = substr(strrchr($domain, '.') ?: '', 1);
+        $servers = $this->rdapBootstrap();
+        if ($servers === null) return ['status' => 'error', 'created' => null];
+        if (empty($servers[$tld])) return ['status' => 'unsupported', 'created' => null];
+
+        $code = 0;
+        $json = self::httpGetJson(rtrim($servers[$tld], '/') . '/domain/' . rawurlencode($domain), ['Accept: application/rdap+json'], 8, $code);
+        if ($code === 404) {
+            $result = ['status' => 'unregistered', 'created' => null];
+        } elseif (is_array($json) && isset($json['ldhName'])) {
+            $created = null;
+            foreach ($json['events'] ?? [] as $e) {
+                if (($e['eventAction'] ?? '') === 'registration') $created = $e['eventDate'];
+            }
+            $result = ['status' => 'ok', 'created' => $created];
+        } else {
+            return ['status' => 'error', 'created' => null]; // do not cache transient failures
+        }
+        $this->db->prepare('REPLACE INTO domain_cache (domain, data, fetched_at) VALUES (?, ?, NOW())')
+            ->execute([$domain, json_encode($result)]);
+        return $result;
+    }
+
+    /** TLD => RDAP base URL map from IANA, cached on disk for 7 days. */
+    private function rdapBootstrap(): ?array
+    {
+        $file = __DIR__ . '/../data/rdap_bootstrap.json';
+        if (!is_file($file) || filemtime($file) < time() - 7 * 86400) {
+            $json = self::httpGetJson('https://data.iana.org/rdap/dns.json', [], 10);
+            if (is_array($json) && !empty($json['services'])) {
+                $map = [];
+                foreach ($json['services'] as [$tlds, $urls]) {
+                    $https = array_values(array_filter($urls, fn($u) => str_starts_with($u, 'https://')));
+                    foreach ($tlds as $t) $map[strtolower($t)] = $https[0] ?? $urls[0];
+                }
+                @file_put_contents($file, json_encode($map));
+                return $map;
+            }
+        }
+        return is_file($file) ? json_decode(file_get_contents($file), true) : null;
+    }
+
+    /** Quick check that a website actually answers (used when the deep content scan is off). */
+    private function reachabilityCheck(string $url, string $host): void
+    {
+        $ip = filter_var($host, FILTER_VALIDATE_IP) ? $host : ($this->domainInfo['ips'][0] ?? '');
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) return; // SSRF guard
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_NOBODY => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_MAXREDIRS => 5,
+            CURLOPT_CONNECTTIMEOUT => FETCH_TIMEOUT, CURLOPT_TIMEOUT => FETCH_TIMEOUT + 2,
+            CURLOPT_SSL_VERIFYPEER => false, CURLOPT_SSL_VERIFYHOST => 0, CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS, CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+            CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) PhishGuard/1.0',
+        ]);
+        curl_exec($ch);
+        $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($status === 0) {
+            $this->domainInfo['reachable'] = false;
+            $this->add('host', 'reachable', 'Website reachable', 'The domain exists but no website answers – it cannot be opened in a browser', 25, 'danger');
+        } else {
+            $this->domainInfo['reachable'] = true;
+            $this->domainInfo['http_status'] = $status;
+            $this->add('host', 'reachable', 'Website reachable', "Website answers (HTTP $status)", 0, 'safe');
+        }
+    }
+
+    /** Google Safe Browsing – the same threat list Chrome uses. Only active when an API key is configured. */
+    private function safeBrowsingListed(string $url): bool
+    {
+        if (SAFE_BROWSING_API_KEY === '') return false;
+        $payload = json_encode([
+            'client' => ['clientId' => 'phishguard-ltc', 'clientVersion' => '1.0'],
+            'threatInfo' => [
+                'threatTypes' => ['SOCIAL_ENGINEERING', 'MALWARE', 'UNWANTED_SOFTWARE', 'POTENTIALLY_HARMFUL_APPLICATION'],
+                'platformTypes' => ['ANY_PLATFORM'], 'threatEntryTypes' => ['URL'], 'threatEntries' => [['url' => $url]],
+            ],
+        ]);
+        $ch = curl_init('https://safebrowsing.googleapis.com/v4/threatMatches:find?key=' . rawurlencode(SAFE_BROWSING_API_KEY));
+        curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_POSTFIELDS => $payload, CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 6, CURLOPT_HTTPHEADER => ['Content-Type: application/json']]);
+        $json = json_decode((string)curl_exec($ch), true);
+        $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($code !== 200) {
+            $this->add('reputation', 'safebrowsing', 'Google Safe Browsing', 'Lookup failed (check the API key)', 0, 'info');
+            return false;
+        }
+        if (!empty($json['matches'])) {
+            $type = str_replace('_', ' ', strtolower($json['matches'][0]['threatType'] ?? 'threat'));
+            $this->domainInfo = ['checked' => true, 'safebrowsing' => 'listed'];
+            $this->add('reputation', 'safebrowsing', 'Google Safe Browsing', "Flagged by Google as $type – Chrome would block this site", 100, 'danger');
+            return true;
+        }
+        $this->add('reputation', 'safebrowsing', 'Google Safe Browsing', 'Not on Google\'s list of dangerous sites', 0, 'safe');
+        return false;
+    }
+
+    private static function httpGetJson(string $url, array $headers = [], int $timeout = 6, ?int &$code = null): ?array
+    {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_MAXREDIRS => 3,
+            CURLOPT_TIMEOUT => $timeout, CURLOPT_CONNECTTIMEOUT => $timeout, CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_USERAGENT => 'PhishGuard/1.0 (+phishing detection)']);
+        $body = curl_exec($ch);
+        $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($body === false || $body === '') return null;
+        $json = json_decode($body, true);
+        return is_array($json) ? $json : null;
+    }
+
+    private function sslCheck(string $host): void
+    {
         $ctx = stream_context_create(['ssl' => [
             'capture_peer_cert' => true, 'verify_peer' => true, 'verify_peer_name' => true, 'SNI_enabled' => true, 'peer_name' => $host,
         ]]);
@@ -314,9 +543,9 @@ class PhishingDetector
     private function contentChecks(string $url, string $host, string $regDomain, array $trusted): ?string
     {
         // SSRF guard – never fetch internal / private addresses
-        $ip = filter_var($host, FILTER_VALIDATE_IP) ? $host : gethostbyname($host);
+        $ip = filter_var($host, FILTER_VALIDATE_IP) ? $host : ($this->domainInfo['ips'][0] ?? gethostbyname($host));
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            $this->add('content', 'fetch', 'Page content', 'Skipped (private or unresolvable address)', 0, 'info');
+            $this->add('content', 'fetch', 'Page content', 'Skipped (private or internal address)', 0, 'info');
             return null;
         }
 
@@ -343,8 +572,15 @@ class PhishingDetector
         $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($body === '' || $status === 0) {
-            $this->add('content', 'fetch', 'Page content', 'Page could not be downloaded', 3, 'warn');
+        if ($status === 0) {
+            $this->domainInfo['reachable'] = false;
+            $this->add('host', 'reachable', 'Website reachable', 'The domain exists but no website answers – it cannot be opened in a browser', 25, 'danger');
+            return null;
+        }
+        $this->domainInfo['reachable'] = true;
+        $this->domainInfo['http_status'] = $status;
+        if ($body === '') {
+            $this->add('content', 'fetch', 'Page content', "Empty page (HTTP $status)", 3, 'warn');
             return null;
         }
         $this->add('content', 'fetch', 'Page content', "Downloaded (HTTP $status, " . number_format(strlen($body) / 1024, 1) . ' KB)', 0, 'info');

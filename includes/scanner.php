@@ -9,7 +9,8 @@
     <button class="btn btn-primary" type="submit">Scan</button>
   </div>
   <div class="scan-options">
-    <label class="check"><input type="checkbox" name="deep" value="1" checked> Deep scan (DNS, SSL certificate &amp; page content)</label>
+    <label class="check"><input type="checkbox" name="deep" value="1" checked> Deep scan (also inspect SSL certificate &amp; page content)</label>
+    <span class="scan-note">Every scan checks that the domain really exists, is registered and is reachable.</span>
   </div>
   <div class="pulse" aria-live="polite">
     <div class="pulse-track"><div class="pulse-fill"></div></div>

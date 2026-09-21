@@ -24,6 +24,7 @@ if (!$allowed): ?>
       'score' => (int)$scan['score'], 'verdict' => $scan['verdict'],
       'list_match' => $data['list_match'] ?? null, 'final_url' => $data['final_url'] ?? $scan['url'],
       'features' => $data['features'] ?? [], 'duration_ms' => $data['duration_ms'] ?? 0,
+      'domain_info' => $data['domain_info'] ?? null, 'deep' => $data['deep'] ?? true,
       'network' => (bool)array_filter($data['features'] ?? [], fn($f) => in_array($f['group'], ['host', 'content'], true)),
   ];
 ?>

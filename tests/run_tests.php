@@ -61,6 +61,21 @@ check('UT21', 'Unit', 'Address without scheme is normalised', str_starts_with($r
 check('UT22', 'Unit', 'Score is capped between 0 and 100',
     $d->analyze('http://login.verify.secure.account.paypa1-update.tk@192.0.2.1:8080//x')['score'] <= 100);
 
+// ---------- Network: domain intelligence (needs Internet access) ----------
+$net = new PhishingDetector(db(), true, false);
+$fake = 'pg-test-' . bin2hex(random_bytes(4)) . '-nosuchsite.com';
+$r = $net->analyze("https://$fake");
+check('NT01', 'Network', 'Made-up domain is detected as non-existent', ($r['domain_info']['exists'] ?? null) === false, $fake);
+check('NT02', 'Network', 'Non-existent domain is never classified safe', $r['verdict'] !== 'safe', "{$r['verdict']} / {$r['score']}");
+check('NT03', 'Network', 'Unregistered domain is identified via RDAP', ($r['domain_info']['registered'] ?? null) === false);
+$r = $net->analyze('https://example.com');
+check('NT04', 'Network', 'Real domain exists, is old and reachable',
+    ($r['domain_info']['exists'] ?? null) === true && ($r['domain_info']['age_days'] ?? 0) > 365 && ($r['domain_info']['reachable'] ?? null) === true,
+    ($r['domain_info']['created'] ?? '?') . ' / HTTP ' . ($r['domain_info']['http_status'] ?? '?'));
+check('NT05', 'Network', 'Real, established domain stays safe', $r['verdict'] === 'safe', "{$r['verdict']} / {$r['score']}");
+$r = $net->analyze('https://pg-missing-sub.example.com');
+check('NT06', 'Network', 'Sub-domain with no server is not safe', $r['verdict'] !== 'safe', "{$r['verdict']} / {$r['score']}");
+
 // ---------- Integration: database ----------
 $r = $d->analyze('http://integration-test.example/login');
 $id = save_scan($r, null, 'web');
