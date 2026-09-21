@@ -19,23 +19,7 @@ require __DIR__ . '/includes/header.php';
     <h1>Check the link <span>before</span> you trust it.</h1>
     <p class="lead">Paste any website address. <?= APP_NAME ?> inspects the URL, the domain, its security certificate and the page itself, then tells you in seconds whether it is safe to enter your details.</p>
 
-    <form id="scan-form" class="scanner" autocomplete="off" novalidate>
-      <?= csrf_field() ?>
-      <label for="scan-url" class="visually-hidden">Website address</label>
-      <div class="scan-bar">
-        <span class="prompt" aria-hidden="true">URL&gt;</span>
-        <input id="scan-url" name="url" type="text" inputmode="url" spellcheck="false"
-               placeholder="https://example.com/login" required autofocus>
-        <button class="btn btn-primary" type="submit">Scan</button>
-      </div>
-      <div class="scan-options">
-        <label class="check"><input type="checkbox" name="deep" value="1" checked> Deep scan (DNS, SSL certificate &amp; page content)</label>
-      </div>
-      <div class="pulse" aria-live="polite">
-        <div class="pulse-track"><div class="pulse-fill"></div></div>
-        <span class="pulse-label"></span>
-      </div>
-    </form>
+    <?php require __DIR__ . '/includes/scanner.php'; ?>
   </div>
 
   <div class="radar" aria-hidden="true">

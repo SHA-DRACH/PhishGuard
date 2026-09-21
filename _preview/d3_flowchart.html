@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}
+.b{fill:#eef4ff;stroke:#2563eb;stroke-width:1.6}.d{fill:#fff6e8;stroke:#c77700;stroke-width:1.6}.e{fill:#0c1530}
+.g{fill:#e8f7ee;stroke:#0f9d58;stroke-width:1.6}.r{fill:#fdecee;stroke:#d9263a;stroke-width:1.6}.y{fill:#fff4dc;stroke:#c77700;stroke-width:1.6}
+.t{font-size:14px;fill:#0c1530;text-anchor:middle}.tw{font-size:14px;fill:#fff;text-anchor:middle;font-weight:700}.lb{font-size:13px;fill:#3d4a66;font-weight:700}
+.ln{stroke:#3d4a66;stroke-width:1.6;fill:none}
+</style></head><body>
+<svg width="1000" height="1300" viewBox="0 0 1000 1300" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3d4a66"/></marker></defs>
+<text x="500" y="30" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#0c1530">Phishing Detection Process – Flowchart</text>
+
+<rect class="e" x="420" y="50" width="160" height="44" rx="22"/><text class="tw" x="500" y="77">START</text>
+<path class="ln" d="M500 94V120" marker-end="url(#a)"/>
+<path class="b" d="M390 120H630L610 170H370Z"/><text class="t" x="500" y="150">User enters URL</text>
+<path class="ln" d="M500 170V195" marker-end="url(#a)"/>
+<rect class="b" x="370" y="195" width="260" height="50" rx="6"/><text class="t" x="500" y="216">Normalise &amp; validate URL</text><text class="t" x="500" y="235" style="font-size:12px">(add scheme, extract host &amp; domain)</text>
+<path class="ln" d="M500 245V270" marker-end="url(#a)"/>
+
+<path class="d" d="M500 270L600 315L500 360L400 315Z"/><text class="t" x="500" y="312">Domain on</text><text class="t" x="500" y="328">blacklist?</text>
+<path class="ln" d="M600 315H760V340" marker-end="url(#a)"/><text class="lb" x="640" y="307">Yes</text>
+<rect class="r" x="680" y="340" width="160" height="50" rx="6"/><text class="t" x="760" y="361">Score = 100</text><text class="t" x="760" y="379">Phishing</text>
+<path class="ln" d="M500 360V385" marker-end="url(#a)"/><text class="lb" x="508" y="377">No</text>
+
+<path class="d" d="M500 385L600 430L500 475L400 430Z"/><text class="t" x="500" y="427">On trusted</text><text class="t" x="500" y="443">list?</text>
+<path class="ln" d="M400 430H240V455" marker-end="url(#a)"/><text class="lb" x="340" y="422">Yes</text>
+<rect class="g" x="160" y="455" width="160" height="50" rx="6"/><text class="t" x="240" y="476">Score = 0</text><text class="t" x="240" y="494">Safe</text>
+<path class="ln" d="M500 475V500" marker-end="url(#a)"/><text class="lb" x="508" y="492">No</text>
+
+<rect class="b" x="300" y="500" width="400" height="64" rx="6"/><text class="t" x="500" y="522">Lexical URL analysis</text><text class="t" x="500" y="541" style="font-size:12px">IP host, @, //, hyphens, sub-domains, HTTPS, TLD, shortener,</text><text class="t" x="500" y="556" style="font-size:12px">keywords, brand impersonation, look-alike, punycode, port …</text>
+<path class="ln" d="M500 564V590" marker-end="url(#a)"/>
+
+<path class="d" d="M500 590L600 635L500 680L400 635Z"/><text class="t" x="500" y="632">Deep scan</text><text class="t" x="500" y="648">selected?</text>
+<path class="ln" d="M400 635H130V880H330" marker-end="url(#a)"/><text class="lb" x="330" y="627">No</text>
+<path class="ln" d="M500 680V705" marker-end="url(#a)"/><text class="lb" x="508" y="697">Yes</text>
+<rect class="b" x="340" y="705" width="320" height="50" rx="6"/><text class="t" x="500" y="726">Host checks</text><text class="t" x="500" y="744" style="font-size:12px">DNS resolution · SSL certificate validity &amp; age</text>
+<path class="ln" d="M500 755V780" marker-end="url(#a)"/>
+<rect class="b" x="340" y="780" width="320" height="64" rx="6"/><text class="t" x="500" y="802">Fetch page (SSRF guard) &amp; content analysis</text><text class="t" x="500" y="821" style="font-size:12px">password field, external form action, hidden iframe,</text><text class="t" x="500" y="836" style="font-size:12px">brand in title, meta refresh, redirects, link ratio</text>
+<path class="ln" d="M500 844V865" marker-end="url(#a)"/>
+<rect class="b" x="330" y="865" width="340" height="50" rx="6"/><text class="t" x="500" y="886">Sum risk points of all features</text><text class="t" x="500" y="904" style="font-size:12px">score = min(100, Σ risk)</text>
+<path class="ln" d="M500 915V940" marker-end="url(#a)"/>
+
+<path class="d" d="M500 940L600 985L500 1030L400 985Z"/><text class="t" x="500" y="990">Score ≥ 50?</text>
+<path class="ln" d="M600 985H760V1010" marker-end="url(#a)"/><text class="lb" x="640" y="977">Yes</text>
+<rect class="r" x="680" y="1010" width="160" height="40" rx="6"/><text class="t" x="760" y="1035">Phishing</text>
+<path class="ln" d="M500 1030V1055" marker-end="url(#a)"/><text class="lb" x="508" y="1047">No</text>
+<path class="d" d="M500 1055L600 1095L500 1135L400 1095Z"/><text class="t" x="500" y="1100">Score ≥ 25?</text>
+<path class="ln" d="M600 1095H700" /><text class="lb" x="630" y="1087">Yes</text>
+<rect class="y" x="700" y="1075" width="140" height="40" rx="6"/><text class="t" x="770" y="1100">Suspicious</text>
+<path class="ln" d="M400 1095H300"/><text class="lb" x="340" y="1087">No</text>
+<rect class="g" x="160" y="1075" width="140" height="40" rx="6"/><text class="t" x="230" y="1100">Safe</text>
+
+<!-- merge to save -->
+<path class="ln" d="M840 365H900V1160H600" marker-end="url(#a)"/>
+<path class="ln" d="M840 1030H900"/><path class="ln" d="M840 1095H900"/>
+<path class="ln" d="M160 480H100V1160H400" marker-end="url(#a)"/><path class="ln" d="M160 1095H100"/>
+<rect class="b" x="400" y="1140" width="200" height="44" rx="6"/><text class="t" x="500" y="1160">Save scan &amp; show result</text><text class="t" x="500" y="1176" style="font-size:12px">(gauge, URL X-ray, signals)</text>
+<path class="ln" d="M500 1184V1205" marker-end="url(#a)"/>
+<rect class="r" x="370" y="1205" width="260" height="36" rx="6"/><text class="t" x="500" y="1228">If phishing → full-screen alert</text>
+<path class="ln" d="M500 1241V1255" marker-end="url(#a)"/>
+<rect class="e" x="420" y="1255" width="160" height="40" rx="20"/><text class="tw" x="500" y="1280">END</text>
+</svg></body></html>

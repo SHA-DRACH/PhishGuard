@@ -32,6 +32,14 @@ Each feature adds risk points. The total (0–100) gives the verdict: **< 25 saf
 
 Brand detection is driven by the **trusted domains** list (Admin → Blacklist & trusted). Give each domain a brand keyword and the engine flags any other domain that uses or imitates it.
 
+## Layouts
+Each area has its own navigation, and links never cross between them (`includes/header.php`):
+- **Public site** (`index.php`, `awareness.php`, `report.php` for guests): top navigation bar.
+- **User area** (`dashboard.php`, `scan.php`, `history.php`, `report.php`, `profile.php`): user sidebar.
+- **Admin console** (`admin/*`): admin sidebar with a pending-reports badge.
+
+Sidebars collapse to icons on desktop (the choice is remembered) and become a slide-in drawer below 1024px. On phones, tables turn into stacked cards.
+
 ## Roles
 - **Guest:** scan, read awareness content, report sites
 - **User:** everything a guest can do, plus a personal dashboard, scan history and profile

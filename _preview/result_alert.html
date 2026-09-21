@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="csrf-token" content="63c43fc135f258157efc31f84e2a5712f55c7a015eac6a11ec8b84dac1a4d8b5">
+  <meta name="color-scheme" content="light dark">
+  <title>Scan result – PhishGuard</title>
+  <link rel="icon" href="/PhishGuard/assets/img/shield.svg" type="image/svg+xml">
+  <script>try{const d=document.documentElement,t=localStorage.getItem('pg-theme');if(t)d.dataset.theme=t;if(localStorage.getItem('pg-sidebar')==='collapsed')d.dataset.sidebar='collapsed';}catch(e){}</script>
+  <link rel="stylesheet" href="/PhishGuard/assets/css/style.css">
+  <script src="/PhishGuard/assets/js/app.js" defer></script>
+</head>
+<body data-base="/PhishGuard" data-layout="public">
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/PhishGuard/index.php">
+      <img src="/PhishGuard/assets/img/shield.svg" alt="" width="32" height="32">
+      <span><strong>PhishGuard</strong><small>LTC Phishing Detection</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="main-nav" class="main-nav">
+      <a href="/PhishGuard/index.php">Scan</a>      <a href="/PhishGuard/awareness.php">Awareness</a>      <a href="/PhishGuard/report.php">Report a site</a>              <a class="btn btn-sm btn-outline" href="/PhishGuard/login.php">Sign in</a>
+            <button class="theme-toggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
+    </nav>
+  </div>
+</header>
+<main class="container page">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Scan #1</span>
+      <h1 class="mono" style="font-size:1.2rem;word-break:break-all">http://libtelco.com.lr.account-suspend.xyz/login/verify</h1>
+      <p class="muted small">Scanned Sep 21, 2026 2:09 PM</p>
+    </div>
+    <a class="btn btn-primary" href="/PhishGuard/index.php?url=http%3A%2F%2Flibtelco.com.lr.account-suspend.xyz%2Flogin%2Fverify">Re-scan now</a>
+  </div>
+  <section id="result" class="result"></section>
+  <script type="application/json" id="scan-data">{"url":"http://libtelco.com.lr.account-suspend.xyz/login/verify","host":"libtelco.com.lr.account-suspend.xyz","domain":"account-suspend.xyz","score":100,"verdict":"phishing","list_match":null,"final_url":"http://libtelco.com.lr.account-suspend.xyz/login/verify","features":[{"group":"reputation","id":"lists","label":"Blacklist / trusted list","result":"Not found in either list","risk":0,"status":"info"},{"group":"lexical","id":"length","label":"URL length","result":"55 characters (long)","risk":4,"status":"warn"},{"group":"lexical","id":"ip_host","label":"IP address as host","result":"Uses a domain name","risk":0,"status":"safe"},{"group":"lexical","id":"at_symbol","label":"\"@\" symbol","result":"Not present","risk":0,"status":"safe"},{"group":"lexical","id":"double_slash","label":"Double-slash redirect","result":"Not present","risk":0,"status":"safe"},{"group":"lexical","id":"hyphen","label":"Hyphens in domain","result":"1 hyphen in domain","risk":5,"status":"warn"},{"group":"lexical","id":"subdomains","label":"Sub-domain depth","result":"3 sub-domain levels","risk":12,"status":"danger"},{"group":"lexical","id":"https","label":"HTTPS","result":"No HTTPS \u2013 data is sent unencrypted","risk":12,"status":"danger"},{"group":"lexical","id":"tld","label":"Top-level domain","result":".xyz is frequently abused for phishing","risk":10,"status":"warn"},{"group":"lexical","id":"shortener","label":"URL shortener","result":"Not a known shortener","risk":0,"status":"safe"},{"group":"lexical","id":"keywords","label":"Sensitive keywords","result":"login, verify, account, suspend","risk":20,"status":"danger"},{"group":"lexical","id":"brand","label":"Brand impersonation","result":"Mentions \"libtelco\" but is not libtelco.com.lr","risk":25,"status":"danger"},{"group":"lexical","id":"typosquat","label":"Look-alike domain","result":"No look-alike of a trusted domain","risk":0,"status":"safe"},{"group":"lexical","id":"punycode","label":"Punycode / IDN","result":"Not used","risk":0,"status":"safe"},{"group":"host","id":"dns","label":"DNS resolution","result":"Domain does not resolve (may be new, taken down or fake)","risk":15,"status":"danger"},{"group":"content","id":"fetch","label":"Page content","result":"Skipped (private or unresolvable address)","risk":0,"status":"info"}],"duration_ms":1927,"network":true,"alert":true}</script>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; 2026 Liberia Telecommunications Corporation &middot; PhishGuard Phishing Detection System</p>
+    <p class="muted">Never enter passwords, PINs or mobile-money codes on a site you did not type yourself.</p>
+  </div>
+</footer>
+
+<dialog id="phish-alert" class="phish-alert">
+  <div class="phish-alert-icon" aria-hidden="true">!</div>
+  <h2>Warning: likely phishing site</h2>
+  <p>This page shows strong signs of phishing. <strong>Do not enter passwords, PINs, card or mobile-money details.</strong></p>
+  <p class="phish-alert-url"></p>
+  <div class="phish-alert-actions">
+    <button class="btn btn-danger" data-close>Keep me safe</button>
+    <button class="btn btn-ghost" data-details>View details</button>
+  </div>
+</dialog>
+</body>
+</html>

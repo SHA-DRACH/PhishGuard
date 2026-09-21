@@ -26,9 +26,33 @@ $('.theme-toggle')?.addEventListener('click', () => {
   try { localStorage.setItem('pg-theme', next); } catch { /* storage unavailable */ }
 });
 
-document.addEventListener('click', (e) => {
-  const menu = $('.user-menu[open]');
-  if (menu && !menu.contains(e.target)) menu.removeAttribute('open');
+/* ------------------------------------------------------------ sidebar (user / admin areas) */
+const backdrop = $('.sidebar-backdrop');
+const setSidebar = (open) => {
+  document.body.classList.toggle('sidebar-visible', open);
+  if (backdrop) backdrop.hidden = !open;
+  $('.sidebar-open')?.setAttribute('aria-expanded', String(open));
+};
+$('.sidebar-open')?.addEventListener('click', () => setSidebar(true));
+$('.sidebar-close')?.addEventListener('click', () => setSidebar(false));
+backdrop?.addEventListener('click', () => setSidebar(false));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setSidebar(false); });
+matchMedia('(min-width: 1025px)').addEventListener('change', (e) => { if (e.matches) setSidebar(false); });
+$('.sidebar-collapse')?.addEventListener('click', () => {
+  const root = document.documentElement;
+  const collapsed = root.dataset.sidebar !== 'collapsed';
+  if (collapsed) root.dataset.sidebar = 'collapsed'; else delete root.dataset.sidebar;
+  try { localStorage.setItem('pg-sidebar', collapsed ? 'collapsed' : 'open'); } catch { /* storage unavailable */ }
+});
+
+/* ------------------------------------------------------------ responsive tables: label cells for card view */
+$$('table.table').forEach((table) => {
+  const heads = $$('thead th', table).map((th) => th.textContent.trim());
+  if (!heads.length) return;
+  table.classList.add('stack');
+  $$('tbody tr', table).forEach((tr) => {
+    [...tr.children].forEach((td, i) => { if (!td.hasAttribute('colspan')) td.dataset.label = heads[i] ?? ''; });
+  });
 });
 
 document.addEventListener('submit', (e) => {
@@ -180,7 +204,7 @@ function renderResult(r, scanId) {
       <li class="signal" data-status="${esc(f.status)}"><span><strong>${esc(f.label)}</strong><small>${esc(f.result)}</small></span><em>${f.risk ? '+' + f.risk : f.status === 'info' ? 'info' : 'ok'}</em></li>`).join('')}</ul></section>`;
   }).join('');
 
-  const reportLink = r.verdict !== 'safe'
+  const reportLink = r.verdict !== 'safe' && document.body.dataset.layout !== 'admin'
     ? `<a class="btn btn-sm btn-outline" href="${BASE}/report.php?url=${encodeURIComponent(r.url)}">Report this site</a>` : '';
   const detailLink = scanId ? `<a class="btn btn-sm btn-ghost" href="${BASE}/result.php?id=${scanId}">Permalink</a>` : '';
 
@@ -284,3 +308,18 @@ $$('.quiz-item').forEach((item) => {
     if (out) out.textContent = `${score} / ${done} correct`;
   });
 });
+
+/* ------------------------------------------------------------ admin: pre-fill responsibilities from position */
+const presetsEl = $('#position-presets');
+if (presetsEl) {
+  const presets = JSON.parse(presetsEl.textContent);
+  const presetTexts = Object.values(presets).map((l) => l.join('\n'));
+  $$('[data-duties-target]').forEach((input) => {
+    const area = $(input.dataset.dutiesTarget);
+    input.addEventListener('change', () => {
+      const list = presets[input.value];
+      // Only overwrite when the box is empty or still holds an unedited preset
+      if (list && (!area.value.trim() || presetTexts.includes(area.value.trim()))) area.value = list.join('\n');
+    });
+  });
+}

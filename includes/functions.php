@@ -32,7 +32,7 @@ function verify_csrf(): void
 {
     $token = $_POST['csrf'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
     if (!is_string($token) || !hash_equals(csrf_token(), $token)) {
-        http_response_code(419);
+        http_response_code(403);
         exit('Invalid or expired form token. Please go back and try again.');
     }
 }
@@ -155,4 +155,80 @@ function paginate(int $total, int $page, int $perPage, array $query = []): strin
             : '<a href="?' . e(http_build_query($query + ['page' => $p])) . '">' . $p . '</a>';
     }
     return $html . '</nav>';
+}
+
+/** Inline stroke icon (24x24 grid). */
+function icon(string $name): string
+{
+    static $paths = [
+        'grid'    => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+        'scan'    => '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="4"/><path d="m14 14 3 3"/>',
+        'list'    => '<path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/>',
+        'flag'    => '<path d="M4 22V4a1 1 0 0 1 1-1h11l-2 4 2 4H5"/>',
+        'shield'  => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+        'chart'   => '<path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/>',
+        'users'   => '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+        'user'    => '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+        'logout'  => '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+        'menu'    => '<path d="M3 6h18M3 12h18M3 18h18"/>',
+        'close'   => '<path d="M18 6 6 18M6 6l12 12"/>',
+        'sidebar' => '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 9l-3 3 3 3"/>',
+        'check'   => '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+        'theme'   => '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>',
+    ];
+    return '<svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+         . ($paths[$name] ?? '') . '</svg>';
+}
+
+/** Standard LTC positions and their default responsibilities (admins may edit per user). */
+function position_presets(): array
+{
+    return [
+        'Cybersecurity Analyst' => [
+            'Investigate phishing reports assigned to you and submit a finding',
+            'Scan suspicious links received by staff and customers',
+            'Recommend malicious domains for the blacklist',
+            'Escalate confirmed incidents to the ICT Security Manager',
+        ],
+        'ICT Support Officer' => [
+            'Help staff verify suspicious emails and links using PhishGuard',
+            'Investigate assigned reports from internal departments',
+            'Guide users who may have entered credentials on a phishing page',
+        ],
+        'Customer Care Officer' => [
+            'Scan links reported by customers before advising them',
+            'Report fake LTC websites and SMS links to the security team',
+            'Share phishing awareness tips with customers',
+        ],
+        'Billing & Finance Officer' => [
+            'Verify payment and billing links before opening them',
+            'Report fake LTC billing or payment pages immediately',
+            'Never share financial credentials through links or email',
+        ],
+        'General Staff' => [
+            'Scan unfamiliar links before opening or entering any details',
+            'Report suspicious websites, emails and SMS links',
+            'Complete the phishing awareness quiz',
+        ],
+    ];
+}
+
+/** Responsibilities shown on a user's dashboard. */
+function user_responsibilities(array $user): array
+{
+    $lines = array_values(array_filter(array_map('trim', preg_split('/\R/', (string)($user['responsibilities'] ?? '')))));
+    if ($lines) return $lines;
+    return position_presets()[$user['position'] ?? ''] ?? [
+        'Scan unfamiliar links before opening them or entering any details',
+        'Report suspicious websites, emails and SMS links you receive',
+        'Learn the warning signs on the Awareness page',
+    ];
+}
+
+/** Open (pending, not yet answered) investigations assigned to a user. */
+function open_task_count(int $userId): int
+{
+    $stmt = db()->prepare("SELECT COUNT(*) FROM reports WHERE assigned_to = ? AND status = 'pending' AND analyst_verdict IS NULL");
+    $stmt->execute([$userId]);
+    return (int)$stmt->fetchColumn();
 }

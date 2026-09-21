@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}
+.ent{fill:#eef4ff;stroke:#2563eb;stroke-width:1.8}.t{font-size:15px;font-weight:700;fill:#0c1530;text-anchor:middle}
+.f{font-size:12.5px;fill:#3d4a66}.ln{stroke:#3d4a66;stroke-width:1.5;fill:none}
+</style></head><body>
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3d4a66"/></marker></defs>
+<text x="600" y="32" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#0c1530">Context Diagram (Level 0 Data Flow Diagram)</text>
+
+<circle cx="600" cy="390" r="130" fill="#eafaf6" stroke="#0aa88f" stroke-width="2.5"/>
+<text x="600" y="375" class="t" style="font-size:20px">0.0</text>
+<text x="600" y="402" class="t" style="font-size:19px">PhishGuard</text>
+<text x="600" y="426" class="t" style="font-size:14px;font-weight:400">Phishing Detection System</text>
+
+<rect class="ent" x="60" y="130" width="200" height="70" rx="4"/><text class="t" x="160" y="171">Guest / Customer</text>
+<rect class="ent" x="60" y="560" width="200" height="70" rx="4"/><text class="t" x="160" y="601">Staff User</text>
+<rect class="ent" x="940" y="130" width="200" height="70" rx="4"/><text class="t" x="1040" y="171">Administrator</text>
+<rect class="ent" x="940" y="560" width="200" height="70" rx="4"/><text class="t" x="1040" y="592">External Websites</text><text x="1040" y="612" text-anchor="middle" class="f">(DNS, TLS, HTML)</text>
+
+<!-- guest -->
+<path class="ln" d="M260 150 C 400 150, 470 230, 510 290" marker-end="url(#a)"/>
+<text class="f" x="330" y="140">URL to scan, phishing report,</text><text class="f" x="330" y="156">registration details</text>
+<path class="ln" d="M495 320 C 430 240, 360 200, 262 190" marker-end="url(#a)"/>
+<text class="f" x="300" y="240">Risk score, verdict, alert,</text><text class="f" x="300" y="256">awareness content</text>
+
+<!-- staff -->
+<path class="ln" d="M260 580 C 400 570, 460 520, 505 480" marker-end="url(#a)"/>
+<text class="f" x="300" y="530">Credentials, scans,</text><text class="f" x="300" y="546">investigation findings</text>
+<path class="ln" d="M520 495 C 470 600, 380 630, 262 620" marker-end="url(#a)"/>
+<text class="f" x="330" y="660">Dashboard, responsibilities,</text><text class="f" x="330" y="676">assigned tasks, scan history</text>
+
+<!-- admin -->
+<path class="ln" d="M940 150 C 800 150, 730 230, 690 290" marker-end="url(#a)"/>
+<text class="f" x="730" y="140">Staff accounts &amp; responsibilities,</text><text class="f" x="730" y="156">assignments, decisions, list entries</text>
+<path class="ln" d="M705 320 C 770 240, 840 200, 938 190" marker-end="url(#a)"/>
+<text class="f" x="760" y="240">Threat statistics, reports with</text><text class="f" x="760" y="256">findings, evaluation metrics</text>
+
+<!-- external -->
+<path class="ln" d="M720 440 C 800 500, 860 560, 938 580" marker-end="url(#a)"/>
+<text class="f" x="760" y="480">DNS lookup, TLS handshake,</text><text class="f" x="760" y="496">HTTP GET request</text>
+<path class="ln" d="M940 610 C 830 640, 740 560, 690 490" marker-end="url(#a)"/>
+<text class="f" x="760" y="660">IP address, certificate,</text><text class="f" x="760" y="676">page HTML</text>
+</svg></body></html>

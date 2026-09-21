@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/includes/bootstrap.php';
 $user = require_login();
+if ($user['role'] === 'admin') redirect('admin/scans.php');
 $pageTitle = 'My scans';
+$layout = 'auto';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();

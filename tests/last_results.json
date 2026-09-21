@@ -1,0 +1,194 @@
+{
+    "avg_ms": 0.5869698524475098,
+    "results": [
+        {
+            "id": "UT01",
+            "area": "Unit",
+            "description": "IP address host is flagged",
+            "pass": true,
+            "detail": "+25"
+        },
+        {
+            "id": "UT02",
+            "area": "Unit",
+            "description": "\"@\" symbol trick is flagged",
+            "pass": true,
+            "detail": "+20"
+        },
+        {
+            "id": "UT03",
+            "area": "Unit",
+            "description": "Missing HTTPS is flagged",
+            "pass": true,
+            "detail": "+12"
+        },
+        {
+            "id": "UT04",
+            "area": "Unit",
+            "description": "HTTPS site passes HTTPS check",
+            "pass": true,
+            "detail": "+0"
+        },
+        {
+            "id": "UT05",
+            "area": "Unit",
+            "description": "Suspicious TLD (.tk) is flagged",
+            "pass": true,
+            "detail": "+10"
+        },
+        {
+            "id": "UT06",
+            "area": "Unit",
+            "description": "URL shortener is flagged",
+            "pass": true,
+            "detail": "+15"
+        },
+        {
+            "id": "UT07",
+            "area": "Unit",
+            "description": "Sensitive keywords are detected",
+            "pass": true,
+            "detail": "+15"
+        },
+        {
+            "id": "UT08",
+            "area": "Unit",
+            "description": "Brand impersonation is detected",
+            "pass": true,
+            "detail": "+25"
+        },
+        {
+            "id": "UT09",
+            "area": "Unit",
+            "description": "Look-alike domain (g00gle) is detected",
+            "pass": true,
+            "detail": "+30"
+        },
+        {
+            "id": "UT10",
+            "area": "Unit",
+            "description": "Look-alike domain (paypa1) is detected",
+            "pass": true,
+            "detail": "+30"
+        },
+        {
+            "id": "UT11",
+            "area": "Unit",
+            "description": "Punycode domain is flagged",
+            "pass": true,
+            "detail": "+15"
+        },
+        {
+            "id": "UT12",
+            "area": "Unit",
+            "description": "Deep sub-domain nesting is flagged",
+            "pass": true,
+            "detail": "+12"
+        },
+        {
+            "id": "UT13",
+            "area": "Unit",
+            "description": "Non-standard port is flagged",
+            "pass": true,
+            "detail": "+8"
+        },
+        {
+            "id": "UT14",
+            "area": "Unit",
+            "description": "Double-slash redirect is flagged",
+            "pass": true,
+            "detail": "+10"
+        },
+        {
+            "id": "UT15",
+            "area": "Unit",
+            "description": "Trusted domain is classified safe",
+            "pass": true,
+            "detail": "safe \/ 0"
+        },
+        {
+            "id": "UT16",
+            "area": "Unit",
+            "description": "Legitimate sub-domain of trusted site is safe",
+            "pass": true,
+            "detail": "safe \/ 0"
+        },
+        {
+            "id": "UT17",
+            "area": "Unit",
+            "description": "Fake LTC billing page is phishing",
+            "pass": true,
+            "detail": "phishing \/ 74"
+        },
+        {
+            "id": "UT18",
+            "area": "Unit",
+            "description": "Blacklisted domain is always phishing",
+            "pass": true,
+            "detail": "phishing \/ 100"
+        },
+        {
+            "id": "UT19",
+            "area": "Unit",
+            "description": "Plain unknown site is safe",
+            "pass": true,
+            "detail": "safe \/ 0"
+        },
+        {
+            "id": "UT20",
+            "area": "Unit",
+            "description": "Empty input is rejected with a validation error",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "UT21",
+            "area": "Unit",
+            "description": "Address without scheme is normalised",
+            "pass": true,
+            "detail": "http:\/\/libtelco.com.lr"
+        },
+        {
+            "id": "UT22",
+            "area": "Unit",
+            "description": "Score is capped between 0 and 100",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "IT01",
+            "area": "Integration",
+            "description": "Scan result is stored in the database",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "IT02",
+            "area": "Integration",
+            "description": "Newly blacklisted domain is detected immediately",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "IT03",
+            "area": "Integration",
+            "description": "Passwords are stored as one-way hashes",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "IT04",
+            "area": "Integration",
+            "description": "Staff responsibilities fall back to position presets",
+            "pass": true,
+            "detail": ""
+        },
+        {
+            "id": "PT01",
+            "area": "Performance",
+            "description": "URL-only analysis completes in under 100 ms",
+            "pass": true,
+            "detail": "avg 0.6 ms"
+        }
+    ]
+}

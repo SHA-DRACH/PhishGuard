@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}
+.lane{fill:#f7f9fe;stroke:#c8d3ea}.lt{font-size:15px;font-weight:700;fill:#fff;text-anchor:middle}
+.b{fill:#fff;stroke:#2563eb;stroke-width:1.6}.d{fill:#fff6e8;stroke:#c77700;stroke-width:1.6}
+.t{font-size:13.5px;fill:#0c1530;text-anchor:middle}.ln{stroke:#3d4a66;stroke-width:1.5;fill:none}.lb{font-size:12px;fill:#3d4a66;font-weight:700}
+.g{fill:#e8f7ee;stroke:#0f9d58;stroke-width:1.6}.r{fill:#fdecee;stroke:#d9263a;stroke-width:1.6}
+</style></head><body>
+<svg width="1200" height="640" viewBox="0 0 1200 640" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3d4a66"/></marker></defs>
+<text x="600" y="30" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#0c1530">Phishing Report Investigation Workflow (Activity Diagram)</text>
+
+<rect class="lane" x="20" y="50" width="1160" height="170"/><rect x="20" y="50" width="40" height="170" fill="#4f8dff"/>
+<text class="lt" transform="translate(45,135) rotate(-90)">Reporter</text>
+<rect class="lane" x="20" y="220" width="1160" height="200"/><rect x="20" y="220" width="40" height="200" fill="#0aa88f"/>
+<text class="lt" transform="translate(45,320) rotate(-90)">Administrator</text>
+<rect class="lane" x="20" y="420" width="1160" height="200"/><rect x="20" y="420" width="40" height="200" fill="#e39b1b"/>
+<text class="lt" transform="translate(45,520) rotate(-90)">Staff member</text>
+
+<circle cx="110" cy="135" r="14" fill="#0c1530"/>
+<path class="ln" d="M124 135H160" marker-end="url(#a)"/>
+<rect class="b" x="160" y="105" width="180" height="60" rx="10"/><text class="t" x="250" y="131">Receives suspicious</text><text class="t" x="250" y="149">link (SMS / email)</text>
+<path class="ln" d="M340 135H380" marker-end="url(#a)"/>
+<rect class="b" x="380" y="105" width="180" height="60" rx="10"/><text class="t" x="470" y="131">Submits report</text><text class="t" x="470" y="149">(URL + description)</text>
+<path class="ln" d="M470 165V260" marker-end="url(#a)"/><text class="lb" x="478" y="215">status = pending</text>
+
+<rect class="b" x="380" y="260" width="180" height="60" rx="10"/><text class="t" x="470" y="286">Reviews report on</text><text class="t" x="470" y="304">Reports page</text>
+<path class="ln" d="M470 320V470" marker-end="url(#a)"/><text class="lb" x="478" y="400">assigns to staff</text>
+<rect class="b" x="380" y="470" width="180" height="60" rx="10"/><text class="t" x="470" y="496">Task appears on</text><text class="t" x="470" y="514">dashboard</text>
+<path class="ln" d="M560 500H600" marker-end="url(#a)"/>
+<rect class="b" x="600" y="470" width="180" height="60" rx="10"/><text class="t" x="690" y="496">Scans URL with</text><text class="t" x="690" y="514">PhishGuard</text>
+<path class="ln" d="M780 500H820" marker-end="url(#a)"/>
+<rect class="b" x="820" y="470" width="180" height="60" rx="10"/><text class="t" x="910" y="496">Submits finding</text><text class="t" x="910" y="514">+ investigation note</text>
+<path class="ln" d="M910 470V350" marker-end="url(#a)"/>
+
+<path class="d" d="M910 260L990 305L910 350L830 305Z"/><text class="t" x="910" y="300">Admin</text><text class="t" x="910" y="316">decision?</text>
+<path class="ln" d="M990 305H1040V260" marker-end="url(#a)"/><text class="lb" x="1000" y="298">confirm</text>
+<rect class="r" x="1010" y="200" width="150" height="60" rx="10"/><text class="t" x="1085" y="225">Status = confirmed</text><text class="t" x="1085" y="243">domain blacklisted</text>
+<path class="ln" d="M990 305H1040V355" marker-end="url(#a)"/><text class="lb" x="1000" y="340">reject</text>
+<rect class="g" x="1010" y="355" width="150" height="50" rx="10"/><text class="t" x="1085" y="385">Status = rejected</text>
+<path class="ln" d="M560 290H830" stroke-dasharray="6 4" marker-end="url(#a)"/><text class="lb" x="600" y="282">or decide directly without assignment</text>
+<circle cx="1085" cy="160" r="12" fill="#fff" stroke="#0c1530" stroke-width="2"/><circle cx="1085" cy="160" r="7" fill="#0c1530"/>
+<path class="ln" d="M1085 200V174" marker-end="url(#a)"/>
+<text class="lb" x="1110" y="164">end</text>
+</svg></body></html>

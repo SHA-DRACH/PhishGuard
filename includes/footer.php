@@ -1,3 +1,4 @@
+<?php if (($layout ?? 'public') === 'public'): ?>
 </main>
 <footer class="site-footer">
   <div class="container">
@@ -5,6 +6,12 @@
     <p class="muted">Never enter passwords, PINs or mobile-money codes on a site you did not type yourself.</p>
   </div>
 </footer>
+<?php else: ?>
+    </main>
+    <footer class="app-footer">&copy; <?= date('Y') ?> <?= ORG_NAME ?> &middot; <?= APP_NAME ?></footer>
+  </div>
+</div>
+<?php endif; ?>
 
 <dialog id="phish-alert" class="phish-alert">
   <div class="phish-alert-icon" aria-hidden="true">!</div>

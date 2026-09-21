@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;background:#fff;font-family:Arial,Helvetica,sans-serif}
+.hd{fill:#2563eb}.ht{font-size:15px;font-weight:700;fill:#fff}.bx{fill:#fff;stroke:#2563eb;stroke-width:1.5}
+.c{font-size:12.5px;fill:#0c1530}.k{font-size:12.5px;fill:#c77700;font-weight:700}.fk{font-size:12.5px;fill:#0aa88f;font-weight:700}
+.ln{stroke:#3d4a66;stroke-width:1.5;fill:none}.lb{font-size:12px;fill:#3d4a66;font-weight:700}
+</style></head><body>
+<svg width="1200" height="740" viewBox="0 0 1200 740" xmlns="http://www.w3.org/2000/svg">
+<text x="600" y="32" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#0c1530">Entity-Relationship Diagram</text>
+<text x="600" y="728" text-anchor="middle" style="font-size:12.5px;fill:#4a5878">PK = primary key (orange) · FK = foreign key (green) · 1 — N = one-to-many</text>
+
+<!-- USERS center -->
+<g transform="translate(440,80)">
+<rect class="bx" width="320" height="330" rx="8"/><rect class="hd" width="320" height="34" rx="8"/><rect class="hd" y="20" width="320" height="14"/>
+<text class="ht" x="160" y="23" text-anchor="middle">users</text>
+<text class="k" x="14" y="56">PK id INT</text>
+<text class="c" x="14" y="80">full_name VARCHAR(120)</text><text class="c" x="14" y="102">email VARCHAR(190) UNIQUE</text>
+<text class="c" x="14" y="124">password_hash VARCHAR(255)</text><text class="c" x="14" y="146">role ENUM(admin, user)</text>
+<text class="c" x="14" y="168">department VARCHAR(120)</text><text class="c" x="14" y="190">position VARCHAR(120)</text>
+<text class="c" x="14" y="212">responsibilities TEXT</text><text class="c" x="14" y="234">is_active TINYINT</text>
+<text class="c" x="14" y="256">must_change_password TINYINT</text><text class="fk" x="14" y="278">FK created_by → users.id</text>
+<text class="c" x="14" y="300">last_login DATETIME</text><text class="c" x="14" y="322">created_at DATETIME</text>
+</g>
+
+<!-- SCANS -->
+<g transform="translate(40,80)">
+<rect class="bx" width="300" height="250" rx="8"/><rect class="hd" width="300" height="34" rx="8"/><rect class="hd" y="20" width="300" height="14"/>
+<text class="ht" x="150" y="23" text-anchor="middle">scans</text>
+<text class="k" x="14" y="56">PK id INT</text><text class="fk" x="14" y="80">FK user_id → users.id (nullable)</text>
+<text class="c" x="14" y="102">url VARCHAR(2048)</text><text class="c" x="14" y="124">host VARCHAR(255)</text>
+<text class="c" x="14" y="146">score TINYINT (0–100)</text><text class="c" x="14" y="168">verdict ENUM(safe, suspicious, phishing)</text>
+<text class="c" x="14" y="190">features LONGTEXT (JSON)</text><text class="c" x="14" y="212">source · ip_address</text><text class="c" x="14" y="234">created_at DATETIME</text>
+</g>
+
+<!-- REPORTS -->
+<g transform="translate(860,80)">
+<rect class="bx" width="300" height="330" rx="8"/><rect class="hd" width="300" height="34" rx="8"/><rect class="hd" y="20" width="300" height="14"/>
+<text class="ht" x="150" y="23" text-anchor="middle">reports</text>
+<text class="k" x="14" y="56">PK id INT</text><text class="fk" x="14" y="80">FK user_id → users.id (reporter)</text>
+<text class="c" x="14" y="102">reporter VARCHAR(190)</text><text class="c" x="14" y="124">url VARCHAR(2048)</text>
+<text class="c" x="14" y="146">description TEXT</text><text class="c" x="14" y="168">status ENUM(pending, confirmed, rejected)</text>
+<text class="fk" x="14" y="190">FK assigned_to → users.id (staff)</text><text class="c" x="14" y="212">assigned_at DATETIME</text>
+<text class="c" x="14" y="234">analyst_verdict · analyst_note</text><text class="c" x="14" y="256">analyst_at DATETIME</text>
+<text class="fk" x="14" y="278">FK reviewed_by → users.id (admin)</text><text class="c" x="14" y="300">reviewed_at DATETIME</text><text class="c" x="14" y="322">created_at DATETIME</text>
+</g>
+
+<!-- BLACKLIST -->
+<g transform="translate(40,520)">
+<rect class="bx" width="300" height="140" rx="8"/><rect class="hd" width="300" height="34" rx="8"/><rect class="hd" y="20" width="300" height="14"/>
+<text class="ht" x="150" y="23" text-anchor="middle">blacklist</text>
+<text class="k" x="14" y="56">PK id INT</text><text class="c" x="14" y="80">domain VARCHAR(255) UNIQUE</text><text class="c" x="14" y="102">reason VARCHAR(255)</text>
+<text class="fk" x="14" y="124">FK added_by → users.id</text>
+</g>
+<!-- WHITELIST -->
+<g transform="translate(440,560)">
+<rect class="bx" width="320" height="140" rx="8"/><rect class="hd" width="320" height="34" rx="8"/><rect class="hd" y="20" width="320" height="14"/>
+<text class="ht" x="160" y="23" text-anchor="middle">whitelist (trusted domains)</text>
+<text class="k" x="14" y="56">PK id INT</text><text class="c" x="14" y="80">domain VARCHAR(255) UNIQUE</text><text class="c" x="14" y="102">brand VARCHAR(60)</text>
+<text class="fk" x="14" y="124">FK added_by → users.id</text>
+</g>
+<!-- EVALUATIONS -->
+<g transform="translate(860,520)">
+<rect class="bx" width="300" height="190" rx="8"/><rect class="hd" width="300" height="34" rx="8"/><rect class="hd" y="20" width="300" height="14"/>
+<text class="ht" x="150" y="23" text-anchor="middle">evaluations</text>
+<text class="k" x="14" y="56">PK id INT</text><text class="fk" x="14" y="80">FK run_by → users.id</text>
+<text class="c" x="14" y="102">dataset_name · network</text><text class="c" x="14" y="124">total · tp · fp · tn · fn</text>
+<text class="c" x="14" y="146">accuracy · precision_v · recall · f1</text><text class="c" x="14" y="168">duration_ms · created_at</text>
+</g>
+
+<!-- relationships -->
+<path class="ln" d="M440 200H340"/><text class="lb" x="420" y="192">1</text><text class="lb" x="348" y="192">N</text><text class="lb" x="360" y="220">performs</text>
+<path class="ln" d="M760 180H860"/><text class="lb" x="768" y="172">1</text><text class="lb" x="846" y="172">N</text><text class="lb" x="778" y="165">submits</text>
+<path class="ln" d="M760 270H860"/><text class="lb" x="768" y="262">1</text><text class="lb" x="846" y="262">N</text><text class="lb" x="772" y="290">is assigned</text>
+<path class="ln" d="M760 370H860"/><text class="lb" x="768" y="362">1</text><text class="lb" x="846" y="362">N</text><text class="lb" x="778" y="390">reviews</text>
+<path class="ln" d="M520 410V470H190V520"/><text class="lb" x="528" y="430">1</text><text class="lb" x="198" y="512">N</text><text class="lb" x="290" y="462">adds</text>
+<path class="ln" d="M600 410V560"/><text class="lb" x="608" y="430">1</text><text class="lb" x="608" y="552">N</text><text class="lb" x="612" y="495">trusts</text>
+<path class="ln" d="M680 410V470H1010V520"/><text class="lb" x="688" y="430">1</text><text class="lb" x="1018" y="512">N</text><text class="lb" x="880" y="462">runs</text>
+<path class="ln" d="M660 80V62H740V80"/><text class="lb" x="750" y="68">created_by (self)</text>
+</svg></body></html>

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/bootstrap.php';
 $user = current_user();
 $pageTitle = 'Report a phishing site';
+$layout = 'auto';
 
 $old = ['url' => trim($_GET['url'] ?? ''), 'description' => '', 'reporter' => ''];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

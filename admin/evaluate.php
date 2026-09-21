@@ -108,10 +108,10 @@ require __DIR__ . '/../includes/header.php';
   <div class="card-head"><h2>Results – <?= e($run['name']) ?></h2>
     <span class="muted small mono"><?= $run['total'] ?> URLs · <?= $run['network'] ? 'with network checks' : 'URL-only' ?> · <?= number_format($run['ms']) ?> ms</span></div>
   <div class="grid grid-4">
-    <div class="kpi kpi-safe"><div class="kpi-label">Accuracy</div><div class="kpi-value"><?= $pct($run['accuracy']) ?></div></div>
-    <div class="kpi"><div class="kpi-label">Precision</div><div class="kpi-value"><?= $pct($run['precision']) ?></div></div>
-    <div class="kpi"><div class="kpi-label">Recall</div><div class="kpi-value"><?= $pct($run['recall']) ?></div></div>
-    <div class="kpi kpi-warn"><div class="kpi-label">F1-score</div><div class="kpi-value"><?= $pct($run['f1']) ?></div></div>
+    <div class="card kpi kpi-safe"><div class="kpi-label">Accuracy</div><div class="kpi-value"><?= $pct($run['accuracy']) ?></div></div>
+    <div class="card kpi"><div class="kpi-label">Precision</div><div class="kpi-value"><?= $pct($run['precision']) ?></div></div>
+    <div class="card kpi"><div class="kpi-label">Recall</div><div class="kpi-value"><?= $pct($run['recall']) ?></div></div>
+    <div class="card kpi kpi-warn"><div class="kpi-label">F1-score</div><div class="kpi-value"><?= $pct($run['f1']) ?></div></div>
   </div>
   <div class="grid grid-2" style="margin-top:20px">
     <div>

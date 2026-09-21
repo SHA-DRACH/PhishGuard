@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="csrf-token" content="d8adcd87e23637641b23f0331e1be47cd274b2608510e230c8d973ce4576fadf">
+  <meta name="color-scheme" content="light dark">
+  <title>Admin overview – PhishGuard</title>
+  <link rel="icon" href="/PhishGuard/assets/img/shield.svg" type="image/svg+xml">
+  <script>try{const d=document.documentElement,t=localStorage.getItem('pg-theme');if(t)d.dataset.theme=t;if(localStorage.getItem('pg-sidebar')==='collapsed')d.dataset.sidebar='collapsed';}catch(e){}</script>
+  <link rel="stylesheet" href="/PhishGuard/assets/css/style.css">
+  <script src="/PhishGuard/assets/js/app.js" defer></script>
+</head>
+<body data-base="/PhishGuard" data-layout="admin">
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Admin navigation">
+    <div class="sidebar-head">
+      <a class="brand" href="/PhishGuard/admin/index.php">
+        <img src="/PhishGuard/assets/img/shield.svg" alt="" width="32" height="32">
+        <span class="side-label"><strong>PhishGuard</strong><small>Admin console</small></span>
+      </a>
+      <button class="sidebar-close" type="button" aria-label="Close menu"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+
+    <nav class="side-nav">
+              <p class="side-heading">Monitor</p>
+        <a href="/PhishGuard/admin/index.php" aria-current="page" title="Overview"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="side-label">Overview</span></a>        <a href="/PhishGuard/admin/scan.php" title="Scanner"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="4"/><path d="m14 14 3 3"/></svg><span class="side-label">Scanner</span></a>        <a href="/PhishGuard/admin/scans.php" title="All scans"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg><span class="side-label">All scans</span></a>        <a href="/PhishGuard/admin/reports.php" title="Reports"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 1-1h11l-2 4 2 4H5"/></svg><span class="side-label">Reports</span><span class="side-count">3</span></a>        <p class="side-heading">Threat intelligence</p>
+        <a href="/PhishGuard/admin/lists.php" title="Blacklist &amp;amp; trusted"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><span class="side-label">Blacklist &amp; trusted</span></a>        <a href="/PhishGuard/admin/evaluate.php" title="Evaluation"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg><span class="side-label">Evaluation</span></a>        <p class="side-heading">Administration</p>
+        <a href="/PhishGuard/admin/users.php" title="Users"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="side-label">Users</span></a>        <a href="/PhishGuard/admin/profile.php" title="My profile"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="side-label">My profile</span></a>          </nav>
+
+    <div class="sidebar-foot">
+      <div class="side-user">
+        <span class="avatar">SA</span>
+        <span class="side-label"><strong>System Administrator</strong><small>admin@ltc.com.lr</small></span>
+      </div>
+      <form method="post" action="/PhishGuard/logout.php"><input type="hidden" name="csrf" value="d8adcd87e23637641b23f0331e1be47cd274b2608510e230c8d973ce4576fadf">        <button type="submit" class="side-logout" title="Sign out"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="side-label">Sign out</span></button>
+      </form>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" hidden></div>
+
+  <div class="app-main">
+    <header class="topbar">
+      <button class="sidebar-open" type="button" aria-label="Open menu" aria-controls="sidebar"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="sidebar-collapse" type="button" aria-label="Collapse sidebar" title="Collapse sidebar"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 9l-3 3 3 3"/></svg></button>
+      <div class="topbar-title">
+        <small>Admin</small>
+        <strong>Admin overview</strong>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
+        <span class="avatar" title="System Administrator">SA</span>
+      </div>
+    </header>
+    <main class="app-content">
+<div class="page-head">
+  <div><span class="eyebrow">Security operations</span><h1>Threat overview</h1>
+    <p class="muted">Organisation-wide phishing activity for Liberia Telecommunications Corporation.</p></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a class="btn btn-ghost" href="scans.php?export=csv">Export CSV</a>
+    <a class="btn btn-primary" href="reports.php">Review reports (3)</a>
+  </div>
+</div>
+
+<div class="grid grid-4">
+  <div class="card kpi"><div class="kpi-label">Total scans</div><div class="kpi-value">62</div><div class="kpi-sub">Average risk score 32/100</div></div>
+  <div class="card kpi kpi-safe"><div class="kpi-label">Safe</div><div class="kpi-value">31</div><div class="kpi-sub">50% of scans</div></div>
+  <div class="card kpi kpi-warn"><div class="kpi-label">Suspicious</div><div class="kpi-value">6</div><div class="kpi-sub">10% of scans</div></div>
+  <div class="card kpi kpi-danger"><div class="kpi-label">Phishing</div><div class="kpi-value">25</div><div class="kpi-sub">40% of scans</div></div>
+</div>
+
+<div class="grid grid-2" style="margin-top:20px">
+  <div class="card">
+    <div class="card-head"><h3>Scans – last 7 days</h3><span class="muted small">stacked by verdict</span></div>
+    <div data-chart="bars" data-series='[{&quot;label&quot;:&quot;Tue&quot;,&quot;safe&quot;:0,&quot;suspicious&quot;:1,&quot;phishing&quot;:7},{&quot;label&quot;:&quot;Wed&quot;,&quot;safe&quot;:0,&quot;suspicious&quot;:2,&quot;phishing&quot;:7},{&quot;label&quot;:&quot;Thu&quot;,&quot;safe&quot;:0,&quot;suspicious&quot;:2,&quot;phishing&quot;:7},{&quot;label&quot;:&quot;Fri&quot;,&quot;safe&quot;:5,&quot;suspicious&quot;:1,&quot;phishing&quot;:3},{&quot;label&quot;:&quot;Sat&quot;,&quot;safe&quot;:10,&quot;suspicious&quot;:0,&quot;phishing&quot;:0},{&quot;label&quot;:&quot;Sun&quot;,&quot;safe&quot;:9,&quot;suspicious&quot;:0,&quot;phishing&quot;:0},{&quot;label&quot;:&quot;Mon&quot;,&quot;safe&quot;:7,&quot;suspicious&quot;:0,&quot;phishing&quot;:1}]'></div>
+  </div>
+  <div class="grid" style="gap:20px">
+    <div class="card">
+      <h3>Verdict distribution</h3>
+      <div data-chart="donut" data-parts='[{&quot;label&quot;:&quot;Safe&quot;,&quot;value&quot;:31,&quot;color&quot;:&quot;var(--safe)&quot;},{&quot;label&quot;:&quot;Suspicious&quot;,&quot;value&quot;:6,&quot;color&quot;:&quot;var(--warn)&quot;},{&quot;label&quot;:&quot;Phishing&quot;,&quot;value&quot;:25,&quot;color&quot;:&quot;var(--danger)&quot;}]'></div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <h3>Most-flagged hosts</h3>
+      <ul class="bar-list">
+              <li><code>libtelco.com.lr.account-suspend.xyz</code><span class="mono small">2 scans · max 100</span>
+          <span class="bar"><i style="width:100%"></i></span></li>
+              <li><code>login.secure.account.verify.lonestar-momo.xyz</code><span class="mono small">1 scans · max 84</span>
+          <span class="bar"><i style="width:50%"></i></span></li>
+              <li><code>paypa1-secure.verify-account.tk</code><span class="mono small">1 scans · max 78</span>
+          <span class="bar"><i style="width:50%"></i></span></li>
+              <li><code>lonestar-free-airtime-bonus.click</code><span class="mono small">1 scans · max 73</span>
+          <span class="bar"><i style="width:50%"></i></span></li>
+              <li><code>amaz0n-order-confirm.gq</code><span class="mono small">1 scans · max 73</span>
+          <span class="bar"><i style="width:50%"></i></span></li>
+              <li><code>instagram-verify-badge.icu</code><span class="mono small">1 scans · max 73</span>
+          <span class="bar"><i style="width:50%"></i></span></li>
+          </ul>
+  </div>
+
+<div class="grid grid-4" style="margin-top:20px">
+  <a class="card kpi" href="users.php" style="color:inherit;text-decoration:none"><div class="kpi-label">Users</div><div class="kpi-value">4</div><div class="kpi-sub">Registered accounts</div></a>
+  <a class="card kpi kpi-warn" href="reports.php" style="color:inherit;text-decoration:none"><div class="kpi-label">Pending reports</div><div class="kpi-value">3</div><div class="kpi-sub">Awaiting review</div></a>
+  <a class="card kpi kpi-danger" href="lists.php" style="color:inherit;text-decoration:none"><div class="kpi-label">Blacklist</div><div class="kpi-value">3</div><div class="kpi-sub">27 trusted domains</div></a>
+  <a class="card kpi kpi-safe" href="evaluate.php" style="color:inherit;text-decoration:none"><div class="kpi-label">Detection accuracy</div>
+    <div class="kpi-value">100%</div>
+    <div class="kpi-sub">F1 100% · last evaluation</div></a>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <div class="card-head"><h3>Latest threats detected</h3><a class="small" href="scans.php?verdict=phishing">All phishing →</a></div>
+    <div class="table-wrap"><table class="table">
+    <thead><tr><th>URL</th><th>Score</th><th>Verdict</th><th>User</th><th>When</th><th></th></tr></thead>
+    <tbody>
+          <tr>
+        <td class="url-cell" title="http://libtelc0.com.lr-portal.cyou/login">http://libtelc0.com.lr-portal.cyou/login</td>
+        <td><span class="score-pill" style="--s:63;--c:var(--danger)"><i></i>63</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Guest</td>
+        <td class="muted small">6 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=63">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="http://gmail-storage-full.quest/upgrade/signin">http://gmail-storage-full.quest/upgrade/signin</td>
+        <td><span class="score-pill" style="--s:68;--c:var(--danger)"><i></i>68</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Precious Wesseh</td>
+        <td class="muted small">6 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=62">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="http://icloud-find-my-iphone.monster/login">http://icloud-find-my-iphone.monster/login</td>
+        <td><span class="score-pill" style="--s:68;--c:var(--danger)"><i></i>68</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Emmanuel Kollie</td>
+        <td class="muted small">6 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=61">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="http://github-security-alert.win/verify">http://github-security-alert.win/verify</td>
+        <td><span class="score-pill" style="--s:68;--c:var(--danger)"><i></i>68</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Grace Toe</td>
+        <td class="muted small">6 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=60">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="http://bank-secure-login-verify-account-update.com/signin?session=8f3a9%2F%2F%3D%3D%2Fx">http://bank-secure-login-verify-account-update.com/signin?session=8f3a9%2F%2F%3D%3D%2Fx</td>
+        <td><span class="score-pill" style="--s:61;--c:var(--danger)"><i></i>61</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Guest</td>
+        <td class="muted small">5 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=59">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="http://moneygram-payout.loan/claim-reward">http://moneygram-payout.loan/claim-reward</td>
+        <td><span class="score-pill" style="--s:57;--c:var(--danger)"><i></i>57</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Guest</td>
+        <td class="muted small">5 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=58">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="https://westernunion-transfer-confirm.work/track">https://westernunion-transfer-confirm.work/track</td>
+        <td><span class="score-pill" style="--s:56;--c:var(--danger)"><i></i>56</span></td>
+        <td><span class="badge badge-phishing">Phishing</span></td>
+        <td class="small">Precious Wesseh</td>
+        <td class="muted small">5 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=57">Details</a></td>
+      </tr>
+          <tr>
+        <td class="url-cell" title="http://linkedln.com/login">http://linkedln.com/login</td>
+        <td><span class="score-pill" style="--s:47;--c:var(--warn)"><i></i>47</span></td>
+        <td><span class="badge badge-suspicious">Suspicious</span></td>
+        <td class="small">Emmanuel Kollie</td>
+        <td class="muted small">5 d ago</td>
+        <td class="actions"><a class="btn btn-sm btn-ghost" href="/PhishGuard/result.php?id=56">Details</a></td>
+      </tr>
+        </tbody>
+  </table></div>
+  </div>
+    </main>
+    <footer class="app-footer">&copy; 2026 Liberia Telecommunications Corporation &middot; PhishGuard</footer>
+  </div>
+</div>
+
+<dialog id="phish-alert" class="phish-alert">
+  <div class="phish-alert-icon" aria-hidden="true">!</div>
+  <h2>Warning: likely phishing site</h2>
+  <p>This page shows strong signs of phishing. <strong>Do not enter passwords, PINs, card or mobile-money details.</strong></p>
+  <p class="phish-alert-url"></p>
+  <div class="phish-alert-actions">
+    <button class="btn btn-danger" data-close>Keep me safe</button>
+    <button class="btn btn-ghost" data-details>View details</button>
+  </div>
+</dialog>
+</body>
+</html>

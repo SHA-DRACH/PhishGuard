@@ -15,9 +15,11 @@ try {
     $pdo->exec('USE `' . DB_NAME . '`');
     $log[] = 'Database "' . DB_NAME . '" ready.';
 
-    $schema = preg_replace('/^\s*--.*$/m', '', file_get_contents(__DIR__ . '/database/schema.sql'));
-    foreach (array_filter(array_map('trim', explode(';', $schema))) as $sql) {
-        $pdo->exec($sql);
+    foreach (['schema.sql', 'migrate_v2.sql'] as $file) {
+        $schema = preg_replace('/^\s*--.*$/m', '', file_get_contents(__DIR__ . '/database/' . $file));
+        foreach (array_filter(array_map('trim', explode(';', $schema))) as $sql) {
+            $pdo->exec($sql);
+        }
     }
     $log[] = 'Tables created.';
 

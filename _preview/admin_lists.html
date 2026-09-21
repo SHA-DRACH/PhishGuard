@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="csrf-token" content="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">
+  <meta name="color-scheme" content="light dark">
+  <title>Blacklist &amp; trusted domains – PhishGuard</title>
+  <link rel="icon" href="/PhishGuard/assets/img/shield.svg" type="image/svg+xml">
+  <script>try{const d=document.documentElement,t=localStorage.getItem('pg-theme');if(t)d.dataset.theme=t;if(localStorage.getItem('pg-sidebar')==='collapsed')d.dataset.sidebar='collapsed';}catch(e){}</script>
+  <link rel="stylesheet" href="/PhishGuard/assets/css/style.css">
+  <script src="/PhishGuard/assets/js/app.js" defer></script>
+</head>
+<body data-base="/PhishGuard" data-layout="admin">
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Admin navigation">
+    <div class="sidebar-head">
+      <a class="brand" href="/PhishGuard/admin/index.php">
+        <img src="/PhishGuard/assets/img/shield.svg" alt="" width="32" height="32">
+        <span class="side-label"><strong>PhishGuard</strong><small>Admin console</small></span>
+      </a>
+      <button class="sidebar-close" type="button" aria-label="Close menu"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+
+    <nav class="side-nav">
+              <p class="side-heading">Monitor</p>
+        <a href="/PhishGuard/admin/index.php" title="Overview"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="side-label">Overview</span></a>        <a href="/PhishGuard/admin/scan.php" title="Scanner"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="4"/><path d="m14 14 3 3"/></svg><span class="side-label">Scanner</span></a>        <a href="/PhishGuard/admin/scans.php" title="All scans"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg><span class="side-label">All scans</span></a>        <a href="/PhishGuard/admin/reports.php" title="Reports"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 1-1h11l-2 4 2 4H5"/></svg><span class="side-label">Reports</span><span class="side-count">3</span></a>        <p class="side-heading">Threat intelligence</p>
+        <a href="/PhishGuard/admin/lists.php" aria-current="page" title="Blacklist &amp;amp; trusted"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><span class="side-label">Blacklist &amp; trusted</span></a>        <a href="/PhishGuard/admin/evaluate.php" title="Evaluation"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg><span class="side-label">Evaluation</span></a>        <p class="side-heading">Administration</p>
+        <a href="/PhishGuard/admin/users.php" title="Users"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="side-label">Users</span></a>        <a href="/PhishGuard/admin/profile.php" title="My profile"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="side-label">My profile</span></a>          </nav>
+
+    <div class="sidebar-foot">
+      <div class="side-user">
+        <span class="avatar">SA</span>
+        <span class="side-label"><strong>System Administrator</strong><small>admin@ltc.com.lr</small></span>
+      </div>
+      <form method="post" action="/PhishGuard/logout.php"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">        <button type="submit" class="side-logout" title="Sign out"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="side-label">Sign out</span></button>
+      </form>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" hidden></div>
+
+  <div class="app-main">
+    <header class="topbar">
+      <button class="sidebar-open" type="button" aria-label="Open menu" aria-controls="sidebar"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="sidebar-collapse" type="button" aria-label="Collapse sidebar" title="Collapse sidebar"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 9l-3 3 3 3"/></svg></button>
+      <div class="topbar-title">
+        <small>Admin</small>
+        <strong>Blacklist &amp; trusted domains</strong>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme"><svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button>
+        <span class="avatar" title="System Administrator">SA</span>
+      </div>
+    </header>
+    <main class="app-content">
+<div class="page-head"><div><span class="eyebrow">Reputation data</span><h1>Blacklist &amp; trusted domains</h1>
+  <p class="muted">Blacklisted domains are always flagged as phishing. Trusted domains with a <strong>brand keyword</strong> power impersonation and look-alike detection.</p></div></div>
+
+<div class="grid grid-2">
+  <section class="card" id="blacklist">
+    <div class="card-head"><h3>Blacklist</h3><span class="badge badge-phishing">3 domains</span></div>
+    <form method="post" class="form-row" style="margin-bottom:16px">
+      <input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a"><input type="hidden" name="list" value="blacklist">
+      <input name="domain" type="text" class="mono" placeholder="evil-domain.tk" required>
+      <input name="reason" type="text" placeholder="Reason (optional)">
+      <button class="btn btn-danger" type="submit">Block</button>
+    </form>
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Domain</th><th>Reason</th><th></th></tr></thead>
+      <tbody>
+              <tr><td class="mono small">lonestar-free-airtime.xyz</td>
+          <td class="small muted">Demo: fake airtime giveaway</td>
+          <td class="actions"><form method="post" data-confirm="Remove lonestar-free-airtime.xyz from the blacklist?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="blacklist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="3">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">secure-paypa1-login.com</td>
+          <td class="small muted">Demo: PayPal credential harvesting</td>
+          <td class="actions"><form method="post" data-confirm="Remove secure-paypa1-login.com from the blacklist?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="blacklist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="2">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">ltc-account-verify.tk</td>
+          <td class="small muted">Demo: impersonates LTC billing portal</td>
+          <td class="actions"><form method="post" data-confirm="Remove ltc-account-verify.tk from the blacklist?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="blacklist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="1">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+            </tbody>
+    </table></div>
+  </section>
+
+  <section class="card" id="whitelist">
+    <div class="card-head"><h3>Trusted domains</h3><span class="badge badge-safe">27 domains</span></div>
+    <form method="post" class="form-row" style="margin-bottom:16px">
+      <input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a"><input type="hidden" name="list" value="whitelist">
+      <input name="domain" type="text" class="mono" placeholder="libtelco.com.lr" required>
+      <input name="brand" type="text" placeholder="Brand keyword (e.g. libtelco)">
+      <button class="btn btn-primary" type="submit">Trust</button>
+    </form>
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Domain</th><th>Brand</th><th></th></tr></thead>
+      <tbody>
+              <tr><td class="mono small">amazon.com</td>
+          <td class="small"><code>amazon</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove amazon.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="14">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">apple.com</td>
+          <td class="small"><code>apple</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove apple.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="11">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">dropbox.com</td>
+          <td class="small"><code>dropbox</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove dropbox.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="26">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">ecobank.com</td>
+          <td class="small"><code>ecobank</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove ecobank.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="21">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">facebook.com</td>
+          <td class="small"><code>facebook</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove facebook.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="15">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">github.com</td>
+          <td class="small"><code>github</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove github.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="24">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">gmail.com</td>
+          <td class="small"><code>gmail</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove gmail.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="5">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">google.com</td>
+          <td class="small"><code>google</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove google.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="4">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">icloud.com</td>
+          <td class="small"><code>icloud</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove icloud.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="12">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">instagram.com</td>
+          <td class="small"><code>instagram</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove instagram.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="16">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">libtelco.com.lr</td>
+          <td class="small"><code>libtelco</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove libtelco.com.lr from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="1">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">linkedin.com</td>
+          <td class="small"><code>linkedin</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove linkedin.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="18">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">live.com</td>
+          <td class="small"><span class="muted">—</span></td>
+          <td class="actions"><form method="post" data-confirm="Remove live.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="9">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">lonestarcell.com</td>
+          <td class="small"><code>lonestar</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove lonestarcell.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="2">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">microsoft.com</td>
+          <td class="small"><code>microsoft</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove microsoft.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="7">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">microsoftonline.com</td>
+          <td class="small"><span class="muted">—</span></td>
+          <td class="actions"><form method="post" data-confirm="Remove microsoftonline.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="27">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">moneygram.com</td>
+          <td class="small"><code>moneygram</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove moneygram.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="23">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">netflix.com</td>
+          <td class="small"><code>netflix</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove netflix.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="19">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">office.com</td>
+          <td class="small"><code>office365</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove office.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="8">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">orange.com</td>
+          <td class="small"><code>orange</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove orange.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="3">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">outlook.com</td>
+          <td class="small"><code>outlook</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove outlook.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="10">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">paypal.com</td>
+          <td class="small"><code>paypal</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove paypal.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="13">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">westernunion.com</td>
+          <td class="small"><code>westernunion</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove westernunion.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="22">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">whatsapp.com</td>
+          <td class="small"><code>whatsapp</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove whatsapp.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="17">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">wikipedia.org</td>
+          <td class="small"><code>wikipedia</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove wikipedia.org from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="25">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">yahoo.com</td>
+          <td class="small"><code>yahoo</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove yahoo.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="20">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+              <tr><td class="mono small">youtube.com</td>
+          <td class="small"><code>youtube</code></td>
+          <td class="actions"><form method="post" data-confirm="Remove youtube.com from trusted domains?"><input type="hidden" name="csrf" value="a221ee50bbd55c80a48755f4c144ff3406310200482af1b58f9cd82abd92408a">            <input type="hidden" name="list" value="whitelist"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="6">
+            <button class="btn btn-sm btn-ghost">Remove</button></form></td></tr>
+            </tbody>
+    </table></div>
+  </section>
+</div>
+    </main>
+    <footer class="app-footer">&copy; 2026 Liberia Telecommunications Corporation &middot; PhishGuard</footer>
+  </div>
+</div>
+
+<dialog id="phish-alert" class="phish-alert">
+  <div class="phish-alert-icon" aria-hidden="true">!</div>
+  <h2>Warning: likely phishing site</h2>
+  <p>This page shows strong signs of phishing. <strong>Do not enter passwords, PINs, card or mobile-money details.</strong></p>
+  <p class="phish-alert-url"></p>
+  <div class="phish-alert-actions">
+    <button class="btn btn-danger" data-close>Keep me safe</button>
+    <button class="btn btn-ghost" data-details>View details</button>
+  </div>
+</dialog>
+</body>
+</html>
