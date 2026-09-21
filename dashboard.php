@@ -32,7 +32,7 @@ require __DIR__ . '/includes/header.php';
       <h1>Hello, <?= e(strtok($user['full_name'], ' ')) ?></h1>
       <p class="muted">
         <?= $user['position'] ? '<strong>' . e($user['position']) . '</strong>' : 'Member' ?><?= $user['department'] ? ' · ' . e($user['department']) : '' ?>
-        · <?= ORG_NAME ?>
+        · <?= e(ORG_NAME) ?>
       </p>
     </div>
   </div>
@@ -49,7 +49,7 @@ require __DIR__ . '/includes/header.php';
     <ol class="duty-list">
       <?php foreach ($responsibilities as $duty): ?><li><?= e($duty) ?></li><?php endforeach; ?>
     </ol>
-    <p class="small muted" style="margin:14px 0 0">Assigned by the <?= ORG_SHORT ?> security administrator. Contact them if your duties change.</p>
+    <p class="small muted" style="margin:14px 0 0">Assigned by the <?= e(ORG_SHORT) ?> security administrator. Contact them if your duties change.</p>
   </section>
 
   <section class="card">

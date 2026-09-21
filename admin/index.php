@@ -17,7 +17,7 @@ require __DIR__ . '/../includes/header.php';
 ?>
 <div class="page-head">
   <div><span class="eyebrow">Security operations</span><h1>Threat overview</h1>
-    <p class="muted">Organisation-wide phishing activity for <?= ORG_NAME ?>.</p></div>
+    <p class="muted">Organisation-wide phishing activity for <?= e(ORG_NAME) ?>.</p></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap">
     <a class="btn btn-ghost" href="scans.php?export=csv">Export CSV</a>
     <a class="btn btn-primary" href="reports.php">Review reports<?= $counts['pending'] ? " ({$counts['pending']})" : '' ?></a>

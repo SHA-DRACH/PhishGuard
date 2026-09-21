@@ -20,13 +20,16 @@ try {
     }
 
     verify_csrf();
+    if (!setting('allow_guest_scan') && !current_user()) {
+        json_response(['ok' => false, 'error' => 'Please sign in to scan websites.'], 401);
+    }
     if (rate_limited()) {
         json_response(['ok' => false, 'error' => 'Too many scans in a short time. Please wait a minute and try again.'], 429);
     }
 
     $deep = !empty($_POST['deep']);
     // Domain existence/registration/reachability checks always run; "deep" adds SSL + page content analysis
-    $result = (new PhishingDetector(db(), true, $deep))->analyze($url);
+    $result = (new PhishingDetector(db(), setting('domain_checks'), $deep))->analyze($url);
     $id = save_scan($result, current_user()['id'] ?? null, 'web');
     json_response(['ok' => true, 'scan_id' => $id, 'result' => $result]);
 } catch (InvalidArgumentException $e) {

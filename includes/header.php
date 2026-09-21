@@ -38,19 +38,21 @@ $top = fn(string $path, string $label) =>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="csrf-token" content="<?= csrf_token() ?>">
   <meta name="color-scheme" content="light dark">
-  <title><?= e($pageTitle ?? 'Home') ?> – <?= APP_NAME ?></title>
-  <link rel="icon" href="<?= url('assets/img/shield.svg') ?>" type="image/svg+xml">
-  <script>try{const d=document.documentElement,t=localStorage.getItem('pg-theme');if(t)d.dataset.theme=t;if(localStorage.getItem('pg-sidebar')==='collapsed')d.dataset.sidebar='collapsed';}catch(e){}</script>
+  <title><?= e($pageTitle ?? 'Home') ?> – <?= e(APP_NAME) ?></title>
+  <link rel="icon" href="<?= logo_url() ?>">
+  <script>try{const d=document.documentElement,t=localStorage.getItem('pg-theme')||'<?= e(setting('default_theme')) ?>';if(t)d.dataset.theme=t;if(localStorage.getItem('pg-sidebar')==='collapsed')d.dataset.sidebar='collapsed';}catch(e){}</script>
   <link rel="stylesheet" href="<?= url('assets/css/style.css') ?>">
+  <style>:root{--accent:<?= e(setting('accent_color')) ?>;--accent-2:<?= e(setting('accent_color_2')) ?>}:root[data-theme="light"]{--accent:color-mix(in srgb,<?= e(setting('accent_color')) ?> 75%,#000);--accent-2:color-mix(in srgb,<?= e(setting('accent_color_2')) ?> 80%,#000)}</style>
   <script src="<?= url('assets/js/app.js') ?>" defer></script>
 </head>
 <body data-base="<?= BASE_URL ?>" data-layout="<?= $layout ?>">
+<?php if (setting('maintenance_mode') && is_admin()): ?><div class="maint-banner">Maintenance mode is on – only administrators can use the site. <a href="<?= url('admin/settings.php?tab=access') ?>">Turn it off</a></div><?php endif; ?>
 <?php if ($layout === 'public'): ?>
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="<?= url('index.php') ?>">
-      <img src="<?= url('assets/img/shield.svg') ?>" alt="" width="32" height="32">
-      <span><strong><?= APP_NAME ?></strong><small><?= ORG_SHORT ?> Phishing Detection</small></span>
+      <img src="<?= logo_url() ?>" alt="" width="32" height="32">
+      <span><strong><?= e(APP_NAME) ?></strong><small><?= e(ORG_SHORT . ' ' . setting('tagline')) ?></small></span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -77,8 +79,8 @@ $top = fn(string $path, string $label) =>
   <aside class="sidebar" id="sidebar" aria-label="<?= $layout === 'admin' ? 'Admin' : 'Account' ?> navigation">
     <div class="sidebar-head">
       <a class="brand" href="<?= url($layout === 'admin' ? 'admin/index.php' : 'dashboard.php') ?>">
-        <img src="<?= url('assets/img/shield.svg') ?>" alt="" width="32" height="32">
-        <span class="side-label"><strong><?= APP_NAME ?></strong><small><?= $layout === 'admin' ? 'Admin console' : 'My account' ?></small></span>
+        <img src="<?= logo_url() ?>" alt="" width="32" height="32">
+        <span class="side-label"><strong><?= e(APP_NAME) ?></strong><small><?= $layout === 'admin' ? 'Admin console' : 'My account' ?></small></span>
       </a>
       <button class="sidebar-close" type="button" aria-label="Close menu"><?= icon('close') ?></button>
     </div>
@@ -95,6 +97,7 @@ $top = fn(string $path, string $label) =>
         <?= $side('admin/evaluate.php', 'Evaluation', 'chart') ?>
         <p class="side-heading">Administration</p>
         <?= $side('admin/users.php', 'Users', 'users') ?>
+        <?= $side('admin/settings.php', 'System settings', 'settings') ?>
         <?= $side('admin/profile.php', 'My profile', 'user') ?>
       <?php else: ?>
         <p class="side-heading">Menu</p>

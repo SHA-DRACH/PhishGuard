@@ -11,7 +11,16 @@ A web-based phishing detection system for **Liberia Telecommunications Corporati
    Default admin: `admin@ltc.com.lr` / `Admin@123`. **Change it straight away** under Profile.
 4. Delete or rename `install.php` once setup is done.
 
-Settings (database, thresholds, timeouts) are in `config/config.php`.
+`config/config.php` only holds the database connection and URL path. Everything else is managed by admins under **Admin → System settings**:
+- **General:** system name, organisation names, tagline, support e-mail/phone, footer note, time zone
+- **Appearance:** logo upload, accent colours, default dark/light theme
+- **Page content:** homepage headline, introduction and feature cards, awareness, report and sign-in texts
+- **Detection:** suspicious/phishing thresholds, domain verification on/off, deep scan default, page-content analysis, timeout, Google Safe Browsing key, keyword/TLD/shortener lists
+- **Risk weights:** points for each of the 31 warning signs (0 switches one off)
+- **Access & security:** public registration, guest scanning and reporting, password length, sign-in lockout, scan rate limit, maintenance mode
+- **Staff positions:** positions and the responsibilities pre-filled for each
+
+Each section can be restored to its defaults. Changes are stored in the `settings` table (`database/migrate_v4.sql`).
 
 ## How the objectives map to the system
 | Objective (Ch. 1.3.2) | Where it is implemented |
@@ -57,7 +66,7 @@ C:\xampp\php\php.exe tests\run_tests.php            # 33 unit, network, integrat
 C:\xampp\php\php.exe database\demo_seed.php          # load demo staff, scans, reports
 C:\xampp\php\php.exe database\demo_seed.php --remove # remove demo data
 ```
-Existing installs: apply `database/migrate_v2.sql` and `database/migrate_v3.sql`. Re-running `install.php` also applies them.
+Existing installs: apply `database/migrate_v2.sql`, `migrate_v3.sql` and `migrate_v4.sql`. Re-running `install.php` also applies them.
 
 ## Documentation assets
 - `docs/figures/`: system screenshots and design diagrams used in the report

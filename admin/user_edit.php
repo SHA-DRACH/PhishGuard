@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        trim($_POST['responsibilities'] ?? '') ?: null, $role, $id]);
         $newPass = $_POST['new_password'] ?? '';
         if ($newPass !== '' && !$isSelf) {
-            if (strlen($newPass) < 8) {
-                flash('error', 'Temporary password must be at least 8 characters – password not changed.');
+            if (strlen($newPass) < setting('password_min_length')) {
+                flash('error', 'Temporary password must be at least ' . setting('password_min_length') . ' characters – password not changed.');
             } else {
                 db()->prepare('UPDATE users SET password_hash = ?, must_change_password = 1 WHERE id = ?')
                     ->execute([password_hash($newPass, PASSWORD_DEFAULT), $id]);

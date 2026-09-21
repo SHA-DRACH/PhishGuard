@@ -2,13 +2,16 @@
 </main>
 <footer class="site-footer">
   <div class="container">
-    <p>&copy; <?= date('Y') ?> <?= ORG_NAME ?> &middot; <?= APP_NAME ?> Phishing Detection System</p>
-    <p class="muted">Never enter passwords, PINs or mobile-money codes on a site you did not type yourself.</p>
+    <p>&copy; <?= date('Y') ?> <?= e(ORG_NAME) ?> &middot; <?= e(APP_NAME) ?> · <?= e(setting('tagline')) ?></p>
+    <p class="muted"><?= e(setting('footer_note')) ?></p>
+    <?php if (setting('support_email') || setting('support_phone')): ?>
+      <p class="muted">Need help? <?= setting('support_email') ? '<a href="mailto:' . e(setting('support_email')) . '">' . e(setting('support_email')) . '</a>' : '' ?><?= setting('support_email') && setting('support_phone') ? ' · ' : '' ?><?= e(setting('support_phone')) ?></p>
+    <?php endif; ?>
   </div>
 </footer>
 <?php else: ?>
     </main>
-    <footer class="app-footer">&copy; <?= date('Y') ?> <?= ORG_NAME ?> &middot; <?= APP_NAME ?></footer>
+    <footer class="app-footer">&copy; <?= date('Y') ?> <?= e(ORG_NAME) ?> &middot; <?= e(APP_NAME) ?></footer>
   </div>
 </div>
 <?php endif; ?>

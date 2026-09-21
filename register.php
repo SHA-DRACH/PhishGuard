@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/includes/bootstrap.php';
 if (current_user()) redirect('dashboard.php');
+if (!setting('allow_registration')) {
+    flash('warning', 'Self-registration is disabled. Please ask the administrator for an account.');
+    redirect('login.php');
+}
+$minPass = setting('password_min_length');
 
 $old = ['full_name' => '', 'email' => '', 'department' => ''];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -11,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (mb_strlen($old['full_name']) < 3) $errors[] = 'Please enter your full name.';
     if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Please enter a valid email address.';
-    if (strlen($password) < 8 || !preg_match('/[A-Za-z]/', $password) || !preg_match('/\d/', $password)) {
-        $errors[] = 'Password must be at least 8 characters and contain letters and numbers.';
+    if (strlen($password) < $minPass || !preg_match('/[A-Za-z]/', $password) || !preg_match('/\d/', $password)) {
+        $errors[] = "Password must be at least $minPass characters and contain letters and numbers.";
     }
     if ($password !== ($_POST['password_confirm'] ?? '')) $errors[] = 'Passwords do not match.';
 
@@ -47,7 +52,7 @@ ob_start(); ?>
     <input id="department" name="department" type="text" value="<?= e($old['department']) ?>" placeholder="e.g. Customer Care, or LTC customer"></div>
   <div class="form-row">
     <div class="field"><label for="password">Password</label>
-      <input id="password" name="password" type="password" required minlength="8" autocomplete="new-password"></div>
+      <input id="password" name="password" type="password" required minlength="<?= $minPass ?>" autocomplete="new-password"></div>
     <div class="field"><label for="password_confirm">Confirm password</label>
       <input id="password_confirm" name="password_confirm" type="password" required autocomplete="new-password"></div>
   </div>

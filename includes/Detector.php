@@ -49,6 +49,11 @@ class PhishingDetector
     private array $features = [];
     private int $score = 0;
     private array $domainInfo = [];
+    private array $weights = [];
+    private array $weightDefaults = [];
+    private array $keywords = [];
+    private array $riskyTlds = [];
+    private array $shorteners = [];
 
     /**
      * @param bool      $networkChecks Domain intelligence: DNS existence, registration/age, reachability, Safe Browsing
@@ -59,6 +64,13 @@ class PhishingDetector
         $this->db = $db;
         $this->networkChecks = $networkChecks;
         $this->deep = $networkChecks && ($deep ?? true);
+
+        // Admin-managed lists and weights (Admin → System settings); constants are the fallbacks
+        $this->weights = function_exists('setting_weights') ? setting_weights() : [];
+        $this->weightDefaults = function_exists('weight_defaults') ? array_map(fn($d) => $d[1], weight_defaults()) : [];
+        $this->keywords = function_exists('setting_list') ? (setting_list('keywords') ?: self::KEYWORDS) : self::KEYWORDS;
+        $this->riskyTlds = function_exists('setting_list') ? (setting_list('suspicious_tlds') ?: self::SUSPICIOUS_TLDS) : self::SUSPICIOUS_TLDS;
+        $this->shorteners = function_exists('setting_list') ? (setting_list('shorteners') ?: self::SHORTENERS) : self::SHORTENERS;
     }
 
     /* ------------------------------------------------------------------ */
@@ -134,16 +146,16 @@ class PhishingDetector
             : $this->add('lexical', 'https', 'HTTPS', 'No HTTPS – data is sent unencrypted', 12, 'danger');
 
         $tld = $isIp ? '' : substr(strrchr($host, '.') ?: '', 1);
-        in_array($tld, self::SUSPICIOUS_TLDS, true)
+        in_array($tld, $this->riskyTlds, true)
             ? $this->add('lexical', 'tld', 'Top-level domain', ".$tld is frequently abused for phishing", 10, 'warn')
             : $this->add('lexical', 'tld', 'Top-level domain', $tld ? ".$tld" : 'n/a', 0, 'safe');
 
-        in_array($regDomain, self::SHORTENERS, true) || in_array($host, self::SHORTENERS, true)
+        in_array($regDomain, $this->shorteners, true) || in_array($host, $this->shorteners, true)
             ? $this->add('lexical', 'shortener', 'URL shortener', "$regDomain hides the real destination", 15, 'warn')
             : $this->add('lexical', 'shortener', 'URL shortener', 'Not a known shortener', 0, 'safe');
 
         $lower = strtolower($url);
-        $found = array_values(array_filter(self::KEYWORDS, fn($k) => str_contains($lower, $k)));
+        $found = array_values(array_filter($this->keywords, fn($k) => str_contains($lower, $k)));
         if ($found) {
             $pts = min(20, count($found) * 5);
             $this->add('lexical', 'keywords', 'Sensitive keywords', implode(', ', array_slice($found, 0, 6)), $pts, $pts >= 10 ? 'danger' : 'warn');
@@ -238,6 +250,11 @@ class PhishingDetector
 
     private function add(string $group, string $id, string $label, string $result, int $risk, string $status): void
     {
+        // Scale by the admin-configured weight (0 switches the feature off)
+        if ($risk > 0 && isset($this->weights[$id], $this->weightDefaults[$id]) && $this->weightDefaults[$id] > 0) {
+            $risk = (int)round($risk * $this->weights[$id] / $this->weightDefaults[$id]);
+            if ($risk === 0 && $status !== 'info') $status = 'info';
+        }
         $this->features[] = compact('group', 'id', 'label', 'result', 'risk', 'status');
         $this->score += $risk;
     }

@@ -7,18 +7,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title><?= e($pageTitle) ?> – <?= APP_NAME ?></title>
-  <link rel="icon" href="<?= url('assets/img/shield.svg') ?>" type="image/svg+xml">
-  <script>try{const t=localStorage.getItem('pg-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <title><?= e($pageTitle) ?> – <?= e(APP_NAME) ?></title>
+  <link rel="icon" href="<?= logo_url() ?>">
+  <script>try{const d=document.documentElement,t=localStorage.getItem('pg-theme')||'<?= e(setting('default_theme')) ?>';if(t)d.dataset.theme=t;if(localStorage.getItem('pg-sidebar')==='collapsed')d.dataset.sidebar='collapsed';}catch(e){}</script>
   <link rel="stylesheet" href="<?= url('assets/css/style.css') ?>">
+  <style>:root{--accent:<?= e(setting('accent_color')) ?>;--accent-2:<?= e(setting('accent_color_2')) ?>}:root[data-theme="light"]{--accent:color-mix(in srgb,<?= e(setting('accent_color')) ?> 75%,#000);--accent-2:color-mix(in srgb,<?= e(setting('accent_color_2')) ?> 80%,#000)}</style>
 </head>
 <body class="auth-page">
   <div class="auth-shell">
     <aside class="auth-side">
       <div>
-        <span class="eyebrow"><?= ORG_NAME ?></span>
-        <h2>Stay one step ahead of phishing.</h2>
-        <p class="muted">A secure workspace for LTC staff and customers to verify links, report fraud and track threats.</p>
+        <span class="eyebrow"><?= e(ORG_NAME) ?></span>
+        <h2><?= e(setting('login_headline')) ?></h2>
+        <p class="muted"><?= e(setting_text('login_text')) ?></p>
       </div>
       <ul>
         <li>Real-time URL, certificate &amp; page analysis</li>
@@ -30,8 +31,8 @@
     </aside>
     <section class="auth-form">
       <a class="brand" href="<?= url('index.php') ?>">
-        <img src="<?= url('assets/img/shield.svg') ?>" alt="" width="34" height="34">
-        <span><strong><?= APP_NAME ?></strong><small><?= ORG_SHORT ?> Phishing Detection</small></span>
+        <img src="<?= logo_url() ?>" alt="" width="34" height="34">
+        <span><strong><?= e(APP_NAME) ?></strong><small><?= e(ORG_SHORT . ' ' . setting('tagline')) ?></small></span>
       </a>
       <?php foreach (take_flashes() as $f): ?>
         <div class="alert alert-<?= e($f['type']) ?>"><?= e($f['message']) ?></div>

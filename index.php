@@ -15,11 +15,15 @@ require __DIR__ . '/includes/header.php';
 ?>
 <section class="hero">
   <div>
-    <span class="eyebrow">Real-time phishing detection · <?= ORG_SHORT ?></span>
-    <h1>Check the link <span>before</span> you trust it.</h1>
-    <p class="lead">Paste any website address. <?= APP_NAME ?> inspects the URL, the domain, its security certificate and the page itself, then tells you in seconds whether it is safe to enter your details.</p>
+    <span class="eyebrow"><?= e(setting('home_eyebrow')) ?> · <?= e(ORG_SHORT) ?></span>
+    <h1><?= preg_replace('/\*([^*]+)\*/', '<span>$1</span>', e(setting('home_title'))) ?></h1>
+    <p class="lead"><?= e(setting_text('home_lead')) ?></p>
 
-    <?php require __DIR__ . '/includes/scanner.php'; ?>
+    <?php if (setting('allow_guest_scan') || current_user()): ?>
+      <?php require __DIR__ . '/includes/scanner.php'; ?>
+    <?php else: ?>
+      <div class="card" style="margin-top:26px"><p style="margin:0">Please <a href="<?= url('login.php') ?>">sign in</a> to scan websites.</p></div>
+    <?php endif; ?>
   </div>
 
   <div class="radar" aria-hidden="true">
@@ -42,16 +46,16 @@ require __DIR__ . '/includes/header.php';
 
 <section class="grid grid-3" style="margin-top:28px">
   <article class="card">
-    <h3>01 · URL analysis</h3>
-    <p class="muted small">Over 15 lexical checks: IP-address hosts, the "@" trick, look-alike domains (g00gle, paypa1), brand impersonation, risky TLDs, shorteners and more.</p>
+    <h3><?= e(setting('home_card1_title')) ?></h3>
+    <p class="muted small"><?= e(setting('home_card1_text')) ?></p>
   </article>
   <article class="card">
-    <h3>02 · Host verification</h3>
-    <p class="muted small">Confirms the domain resolves, validates the SSL certificate against the domain and flags brand-new certificates often used by attackers.</p>
+    <h3><?= e(setting('home_card2_title')) ?></h3>
+    <p class="muted small"><?= e(setting('home_card2_text')) ?></p>
   </article>
   <article class="card">
-    <h3>03 · Page inspection</h3>
-    <p class="muted small">Looks for password forms that submit elsewhere, hidden iframes, fake brand titles and cross-domain redirects – before you type anything.</p>
+    <h3><?= e(setting('home_card3_title')) ?></h3>
+    <p class="muted small"><?= e(setting('home_card3_text')) ?></p>
   </article>
 </section>
 <?php require __DIR__ . '/includes/footer.php'; ?>

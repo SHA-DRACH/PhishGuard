@@ -4,6 +4,7 @@
  * Visit http://localhost/PhishGuard/install.php (or run: php install.php).
  */
 require_once __DIR__ . '/config/config.php';
+defined('APP_NAME') || define('APP_NAME', 'PhishGuard');
 
 $cli = PHP_SAPI === 'cli';
 $log = [];
@@ -15,7 +16,7 @@ try {
     $pdo->exec('USE `' . DB_NAME . '`');
     $log[] = 'Database "' . DB_NAME . '" ready.';
 
-    foreach (['schema.sql', 'migrate_v2.sql', 'migrate_v3.sql'] as $file) {
+    foreach (['schema.sql', 'migrate_v2.sql', 'migrate_v3.sql', 'migrate_v4.sql'] as $file) {
         $schema = preg_replace('/^\s*--.*$/m', '', file_get_contents(__DIR__ . '/database/' . $file));
         foreach (array_filter(array_map('trim', explode(';', $schema))) as $sql) {
             $pdo->exec($sql);

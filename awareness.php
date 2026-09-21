@@ -13,8 +13,8 @@ $quiz = [
 
 require __DIR__ . '/includes/header.php';
 ?>
-<div class="page-head"><div><span class="eyebrow">Security awareness</span><h1>Spot a phishing link in 10 seconds</h1>
-  <p class="muted">Phishing succeeds by exploiting trust and urgency. Learn the signs our detector looks for, and you'll catch most attacks yourself.</p></div></div>
+<div class="page-head"><div><span class="eyebrow">Security awareness</span><h1><?= e(setting('awareness_title')) ?></h1>
+  <p class="muted"><?= e(setting_text('awareness_intro')) ?></p></div></div>
 
 <section class="grid grid-3">
   <article class="card tip-card"><span class="tip-num">SIGN 01</span><h3>Read the real domain</h3>
@@ -26,7 +26,7 @@ require __DIR__ . '/includes/header.php';
   <article class="card tip-card"><span class="tip-num">SIGN 04</span><h3>HTTPS ≠ safe</h3>
     <p class="muted small">The padlock only means the connection is encrypted – many phishing sites have one. Always combine it with checking the domain.</p></article>
   <article class="card tip-card"><span class="tip-num">SIGN 05</span><h3>Short links hide the destination</h3>
-    <p class="muted small">bit.ly, tinyurl and similar services hide where you'll land. Scan them with <?= APP_NAME ?> first.</p></article>
+    <p class="muted small">bit.ly, tinyurl and similar services hide where you'll land. Scan them with <?= e(APP_NAME) ?> first.</p></article>
   <article class="card tip-card"><span class="tip-num">SIGN 06</span><h3>Never share PINs or OTPs</h3>
     <p class="muted small">LTC, banks and mobile-money providers will never ask for your password, PIN or one-time code by link, SMS or phone call.</p></article>
 </section>

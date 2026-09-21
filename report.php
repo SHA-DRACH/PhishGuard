@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/includes/bootstrap.php';
 $user = current_user();
+if (!$user && !setting('allow_guest_report')) {
+    flash('warning', 'Please sign in to report a website.');
+    redirect('login.php');
+}
 $pageTitle = 'Report a phishing site';
 $layout = 'auto';
 
@@ -24,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require __DIR__ . '/includes/header.php';
 ?>
 <div class="page-head"><div><span class="eyebrow">Community defence</span><h1>Report a phishing site</h1>
-  <p class="muted">Received a suspicious link by SMS, WhatsApp or email? Report it. Confirmed sites are blacklisted for every user.</p></div></div>
+  <p class="muted"><?= e(setting_text('report_intro')) ?></p></div></div>
 
 <div class="grid grid-2">
   <form class="card" method="post" novalidate>
@@ -44,9 +48,10 @@ require __DIR__ . '/includes/header.php';
     <h3>What happens next?</h3>
     <ul class="advice">
       <li>An LTC ICT security analyst reviews your report, usually within one working day.</li>
-      <li>If confirmed, the domain is added to the <?= APP_NAME ?> blacklist and flagged instantly for everyone.</li>
+      <li>If confirmed, the domain is added to the <?= e(APP_NAME) ?> blacklist and flagged instantly for everyone.</li>
       <li>Never reply to the sender or click the link again while waiting.</li>
       <li>If you entered a password or PIN, change it immediately and contact your provider.</li>
+      <?php if (setting('support_email') || setting('support_phone')): ?><li>Urgent? Contact the security team: <?= e(trim(setting('support_email') . ' ' . setting('support_phone'))) ?></li><?php endif; ?>
     </ul>
   </div>
 </div>

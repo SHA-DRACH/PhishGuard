@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $duties = trim($_POST['responsibilities'] ?? '');
         $exists = db()->prepare('SELECT 1 FROM users WHERE email = ?');
         $exists->execute([$email]);
-        if (mb_strlen($name) < 3 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($pass) < 8) {
-            flash('error', 'Enter a name, a valid email and a temporary password of at least 8 characters.');
+        if (mb_strlen($name) < 3 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($pass) < setting('password_min_length')) {
+            flash('error', 'Enter a name, a valid email and a temporary password of at least ' . setting('password_min_length') . ' characters.');
         } elseif ($exists->fetch()) {
             flash('error', 'That email is already registered.');
         } else {
@@ -61,7 +61,7 @@ require __DIR__ . '/../includes/header.php';
         <datalist id="position-list"><?php foreach (array_keys($presets) as $p): ?><option value="<?= e($p) ?>"><?php endforeach; ?></datalist></div>
       <div class="field"><label for="rl">System role</label>
         <select id="rl" name="role"><option value="user">User – personal dashboard</option><option value="admin">Administrator – admin console</option></select></div>
-      <div class="field"><label for="pw">Temporary password</label><input id="pw" name="password" type="text" minlength="8" required autocomplete="off"></div>
+      <div class="field"><label for="pw">Temporary password</label><input id="pw" name="password" type="text" minlength="<?= setting('password_min_length') ?>" required autocomplete="off"></div>
     </div>
     <div class="field"><label for="duties">Responsibilities <span class="muted">(one per line – shown on the user's dashboard)</span></label>
       <textarea id="duties" name="responsibilities" rows="4" placeholder="Pick a position to pre-fill standard responsibilities"></textarea></div>

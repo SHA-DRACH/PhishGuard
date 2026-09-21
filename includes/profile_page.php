@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $new = $_POST['new_password'] ?? '';
         if (!password_verify($_POST['current_password'] ?? '', $stmt->fetchColumn())) {
             flash('error', 'Your current password is incorrect.');
-        } elseif (strlen($new) < 8 || !preg_match('/[A-Za-z]/', $new) || !preg_match('/\d/', $new)) {
-            flash('error', 'New password must be at least 8 characters and contain letters and numbers.');
+        } elseif (strlen($new) < setting('password_min_length') || !preg_match('/[A-Za-z]/', $new) || !preg_match('/\d/', $new)) {
+            flash('error', 'New password must be at least ' . setting('password_min_length') . ' characters and contain letters and numbers.');
         } elseif ($new !== ($_POST['new_password_confirm'] ?? '')) {
             flash('error', 'New passwords do not match.');
         } else {
